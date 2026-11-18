@@ -2,21 +2,829 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>حل الواجب أو التدريبات | البابل شيت الذكي</title>
-    <script src="[https://cdn.tailwindcss.com](https://cdn.tailwindcss.com)"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <title>البابل شيت الذكي | تصحيح فوري وبنك أخطائك</title>
+    <!-- Favicon & Home Screen App Icon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%25' stop-color='%231e3a8a'/%3E%3Cstop offset='100%25' stop-color='%233b82f6'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='16' fill='url(%23g)'/%3E%3Crect x='14' y='16' width='14' height='14' rx='4' fill='none' stroke='%23ffffff' stroke-width='3.5'/%3E%3Cpath d='M17.5 23l3 3 5.5-6' fill='none' stroke='%2334d399' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cline x1='34' y1='23' x2='50' y2='23' stroke='%23ffffff' stroke-width='3.5' stroke-linecap='round'/%3E%3Crect x='14' y='36' width='14' height='14' rx='4' fill='none' stroke='%23ffffff' stroke-width='3.5'/%3E%3Cpath d='M17.5 43l3 3 5.5-6' fill='none' stroke='%2334d399' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cline x1='34' y1='43' x2='50' y2='43' stroke='%23ffffff' stroke-width='3.5' stroke-linecap='round'/%3E%3C/svg%3E">
+    <link rel="apple-touch-icon" id="apple-touch-icon-link" href="">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="البابل شيت الذكي">
+    <meta name="application-name" content="البابل شيت الذكي">
+    <meta name="theme-color" id="meta-theme-color" content="#1e3a8a">
+
+    <!-- Google Fonts: Cairo & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Inter:wght@500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Cairo', 'sans-serif'],
+                        en: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        navy: {
+                            800: '#1e3a8a',
+                            900: '#172554',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <!-- Shared Styles -->
     <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="[https://unpkg.com/@phosphor-icons/web](https://unpkg.com/@phosphor-icons/web)">
 </head>
-<body data-page="solve" class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 min-h-screen flex flex-col">
-    <header class="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 p-4 flex justify-between items-center">
-        <h1 id="solve-subject-badge" class="font-extrabold text-lg">جاري تحميل السؤال...</h1>
-        <button onclick="navigateTo('home')" class="px-4 py-2 bg-blue-900 text-white rounded-xl text-xs font-bold">إنهاء والرجوع</button>
-    </header>
-    <main class="flex-1 max-w-4xl w-full mx-auto p-4 sm:p-6 space-y-6">
-        <div id="question-render-container" class="bg-white dark:bg-slate-900 rounded-3xl p-6 border shadow-sm space-y-4">
-            <!-- Dynamic Question Header, Passage, Table, MCQ or Essay options -->
+<body data-page="home" class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 min-h-screen flex flex-col">
+
+    <!-- ===================================================================== -->
+    <!-- TOP NAVIGATION HEADER                                                 -->
+    <!-- ===================================================================== -->
+    <header class="sticky top-0 z-40 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 shadow-sm">
+        <div class="max-w-7xl mx-auto px-3 sm:px-6 h-16 flex items-center justify-between gap-2">
+            <!-- Logo & Brand -->
+            <button onclick="navigateTo('home')" class="flex items-center gap-2.5 text-right group focus:outline-none">
+                <div class="w-10 h-10 rounded-xl bg-blue-900 dark:bg-blue-700 text-white flex items-center justify-center shadow-md group-hover:scale-105 transition-transform">
+                    <i class="ph-bold ph-check-square-offset text-2xl"></i>
+                </div>
+                <div>
+                    <h1 class="font-extrabold text-base sm:text-lg leading-tight text-slate-900 dark:text-white">البابل شيت الذكي</h1>
+                    <p class="text-[11px] text-slate-500 dark:text-slate-400 hidden sm:block">تصحيح فوري وتحليل ذكي لأخطائك</p>
+                </div>
+            </button>
+
+            <!-- Navigation Actions -->
+            <div class="flex items-center gap-1.5 sm:gap-2.5">
+                <!-- User Profile Pill -->
+                <button onclick="openProfileSettingsModal()" id="header-user-pill" class="px-2.5 sm:px-3 py-2 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-1.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-100 border border-slate-200 dark:border-slate-700 transition-colors" title="ملفي الشخصي والألوان">
+                    <i id="header-user-icon" class="ph-fill ph-user-circle text-lg text-blue-900 dark:text-blue-400"></i>
+                    <span id="header-user-name" class="max-w-[85px] sm:max-w-[120px] truncate">حسابي</span>
+                </button>
+
+                <!-- Tutorial Guide Button -->
+                <button onclick="openTutorialFromStart()" class="px-2.5 sm:px-3 py-2 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-1.5 text-indigo-700 bg-indigo-50 hover:bg-indigo-100 dark:bg-indigo-950/60 dark:text-indigo-300 dark:hover:bg-indigo-900/60 border border-indigo-200 dark:border-indigo-800 transition-colors" title="شرح طريقة استخدام الموقع">
+                    <i class="ph-bold ph-question text-lg"></i>
+                    <span class="hidden sm:inline">شرح الاستخدام</span>
+                </button>
+
+                <!-- Home Button -->
+                <button onclick="navigateTo('home')" id="nav-home-btn" class="px-3 py-2 rounded-xl text-sm font-bold flex items-center gap-1.5 transition-colors bg-blue-50 text-blue-900 dark:bg-blue-950/60 dark:text-blue-300">
+                    <i class="ph-bold ph-house text-lg"></i>
+                    <span class="hidden md:inline">الرئيسية</span>
+                </button>
+
+                <!-- Library Page Button (New!) -->
+                <button onclick="navigateTo('library')" id="nav-library-btn" class="px-3 py-2 rounded-xl text-sm font-bold flex items-center gap-1.5 transition-colors text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800">
+                    <i class="ph-bold ph-books text-lg text-amber-600 dark:text-amber-400"></i>
+                    <span>المكتبة</span>
+                </button>
+
+                <!-- All Sessions Folders Page ("سجل الحل") -->
+                <button onclick="navigateTo('homeworks')" id="nav-homeworks-btn" class="px-3 py-2 rounded-xl text-sm font-bold flex items-center gap-1.5 transition-colors text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800">
+                    <i class="ph-bold ph-folders text-lg text-blue-900 dark:text-blue-400"></i>
+                    <span>سجل الحل</span>
+                </button>
+
+                <!-- My Mistakes ("أخطائي") Button with Badge -->
+                <button onclick="navigateTo('mistakes')" id="nav-mistakes-btn" class="relative px-3 py-2 rounded-xl text-sm font-bold flex items-center gap-1.5 transition-colors text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800">
+                    <i class="ph-bold ph-warning-circle text-lg text-rose-500"></i>
+                    <span>أخطائي</span>
+                    <span id="mistakes-badge" class="bg-rose-500 text-white text-xs font-extrabold px-2 py-0.5 rounded-full min-w-[22px] text-center">0</span>
+                </button>
+
+                <!-- Backup & Restore Button -->
+                <button onclick="openBackupModal()" class="p-2.5 sm:px-3 sm:py-2 rounded-xl text-sm font-bold flex items-center gap-1.5 text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-700 transition-colors" title="النسخ الاحتياطي ونقل البيانات">
+                    <i class="ph-bold ph-cloud-arrow-up text-lg text-emerald-600 dark:text-emerald-400"></i>
+                    <span class="hidden lg:inline">نسخة احتياطية</span>
+                </button>
+
+                <!-- Dark / Light Theme Toggle -->
+                <button onclick="toggleTheme()" class="p-2.5 rounded-xl text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-700 transition-colors" title="تغيير المظهر (ليلي / نهاري)">
+                    <i id="theme-icon" class="ph-bold ph-moon text-lg"></i>
+                </button>
+            </div>
         </div>
+    </header>
+
+    <!-- ===================================================================== -->
+    <!-- MAIN CONTENT CONTAINER (HOME)                                         -->
+    <!-- ===================================================================== -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 py-5 sm:py-8">
+
+        <section id="view-home" class="space-y-6 sm:space-y-8">
+            
+            <!-- Personalized Greeting Banner -->
+            <div class="bg-gradient-to-l from-blue-950 via-blue-900 to-indigo-800 text-white rounded-3xl p-5 sm:p-7 shadow-lg flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 relative overflow-hidden">
+                <div class="space-y-1 z-10">
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/15 text-xs font-bold backdrop-blur-sm">
+                        <i class="ph-fill ph-sparkle text-amber-300"></i> جاهز للمذاكرة والتصحيح الفوري
+                    </span>
+                    <h2 id="home-welcome-heading" class="text-xl sm:text-2xl md:text-3xl font-black tracking-tight pt-1">أهلاً بيك في البابل شيت الذكي! 🚀</h2>
+                    <p id="home-welcome-subtext" class="text-xs sm:text-sm text-blue-100/90 max-w-xl">
+                        سواء بتحل واجب، تدريب، أو اختبار شامل — نظّم كل دروسك وراجع غلطاتك بالكتاب والدرس.
+                    </p>
+                </div>
+                <div class="flex flex-wrap items-center gap-2 z-10">
+                    <button onclick="openTutorialFromStart()" class="px-4 py-2.5 rounded-xl bg-white text-blue-950 hover:bg-blue-50 font-extrabold text-xs sm:text-sm shadow flex items-center gap-1.5 transition-transform active:scale-95">
+                        <i class="ph-bold ph-play-circle text-lg text-blue-700"></i>
+                        <span>شوف شرح الاستخدام</span>
+                    </button>
+                </div>
+                <i class="ph-duotone ph-exam text-9xl text-white/5 absolute -left-4 -bottom-6 pointer-events-none"></i>
+            </div>
+
+            <!-- Action Cards: Start New Session (Upload JSON vs Manual) + Prompt Helper -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
+                
+                <!-- Card 1: Upload JSON Answer Key + Student Metadata Form (7 cols) -->
+                <div class="lg:col-span-7 bg-white dark:bg-slate-900 rounded-3xl p-5 sm:p-7 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between gap-2 mb-4">
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-blue-50 text-blue-900 dark:bg-blue-950/70 dark:text-blue-300">
+                                <i class="ph-fill ph-sparkle"></i> الطريقة الأسرع (الذكاء الاصطناعي)
+                            </span>
+                            <button onclick="openPromptModal()" class="text-xs sm:text-sm font-bold text-blue-700 dark:text-blue-400 hover:underline flex items-center gap-1">
+                                <i class="ph-bold ph-copy"></i>
+                                معندكش ملف؟ انسخ البرومت
+                            </button>
+                        </div>
+                        <h2 class="text-xl sm:text-2xl font-extrabold mb-1.5">ابدأ جلسة جديدة من ملف AI</h2>
+                        <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mb-4 leading-relaxed">
+                            الذكاء الاصطناعي بيستخرج الأسئلة، الجداول، الرسومات، والإجابات فقط — وإنت بتسجل بيانات الدرس والنوع هنا.
+                        </p>
+
+                        <!-- Student Metadata Inputs BEFORE/AFTER Selecting JSON -->
+                        <form id="json-upload-meta-form" onsubmit="startSessionFromUploadedJson(event)" class="space-y-3.5">
+                            <!-- File Dropzone -->
+                            <label id="json-dropzone" class="cursor-pointer group flex flex-col items-center justify-center border-2 border-dashed border-slate-300 dark:border-slate-700 hover:border-blue-800 dark:hover:border-blue-500 rounded-2xl p-5 bg-slate-50/70 dark:bg-slate-800/40 transition-all text-center">
+                                <input type="file" id="json-file-input" accept=".json,application/json" class="hidden" onchange="handleJsonFileSelect(event)">
+                                <div class="w-12 h-12 rounded-2xl bg-blue-900/10 dark:bg-blue-500/10 text-blue-900 dark:text-blue-400 flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
+                                    <i id="json-drop-icon" class="ph-bold ph-upload-simple text-2xl"></i>
+                                </div>
+                                <span id="json-drop-title" class="font-extrabold text-sm sm:text-base text-slate-800 dark:text-slate-200">اضغط لاختيار ملف الأسئلة والإجابات (.json)</span>
+                                <span id="json-drop-subtitle" class="text-xs text-slate-400 mt-0.5">أو اسحب الملف وأفلته هنا مباشرة</span>
+                            </label>
+
+                            <!-- Session Category Selector: واجب / تدريب / اختبار -->
+                            <div>
+                                <label class="block text-xs font-extrabold mb-1.5 text-slate-700 dark:text-slate-300">نوع الجلسة *</label>
+                                <div class="grid grid-cols-3 gap-2">
+                                    <label class="cursor-pointer">
+                                        <input type="radio" name="json-session-category" value="homework" checked class="peer hidden">
+                                        <div class="py-2.5 px-2 rounded-xl border-2 border-slate-200 dark:border-slate-700 peer-checked:border-blue-800 peer-checked:bg-blue-50 dark:peer-checked:bg-blue-950/50 text-center font-extrabold text-xs sm:text-sm transition-all flex items-center justify-center gap-1.5">
+                                            <i class="ph-bold ph-book-bookmark text-blue-700 dark:text-blue-400"></i>
+                                            <span>واجب</span>
+                                        </div>
+                                    </label>
+                                    <label class="cursor-pointer">
+                                        <input type="radio" name="json-session-category" value="practice" class="peer hidden">
+                                        <div class="py-2.5 px-2 rounded-xl border-2 border-slate-200 dark:border-slate-700 peer-checked:border-emerald-600 peer-checked:bg-emerald-50 dark:peer-checked:bg-emerald-950/50 text-center font-extrabold text-xs sm:text-sm transition-all flex items-center justify-center gap-1.5">
+                                            <i class="ph-bold ph-target text-emerald-600 dark:text-emerald-400"></i>
+                                            <span>تدريب</span>
+                                        </div>
+                                    </label>
+                                    <label class="cursor-pointer">
+                                        <input type="radio" name="json-session-category" value="exam" class="peer hidden">
+                                        <div class="py-2.5 px-2 rounded-xl border-2 border-slate-200 dark:border-slate-700 peer-checked:border-amber-600 peer-checked:bg-amber-50 dark:peer-checked:bg-amber-950/50 text-center font-extrabold text-xs sm:text-sm transition-all flex items-center justify-center gap-1.5">
+                                            <i class="ph-bold ph-exam text-amber-600 dark:text-amber-400"></i>
+                                            <span>اختبار</span>
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Student Metadata Inputs (Subject, Book/Source, Chapter, Lesson) -->
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <div>
+                                    <label class="block text-xs font-bold mb-1 text-slate-600 dark:text-slate-400">اسم المادة *</label>
+                                    <input type="text" id="json-subject" required placeholder="مثال: كيمياء، فيزياء، إنجليزي..." list="subjects-datalist" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-sm font-semibold focus:outline-none focus:border-blue-800">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold mb-1 text-slate-600 dark:text-slate-400">المصدر / الكتاب *</label>
+                                    <input type="text" id="json-book" required placeholder="مثال: كتاب الوافي، مذكرة المستر..." list="books-datalist" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-sm font-semibold focus:outline-none focus:border-blue-800">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold mb-1 text-slate-600 dark:text-slate-400">الوحدة / الباب / الفصل *</label>
+                                    <input type="text" id="json-chapter" required placeholder="مثال: الباب الأول، Unit 3..." class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-sm font-semibold focus:outline-none focus:border-blue-800">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold mb-1 text-slate-600 dark:text-slate-400">اسم أو رقم الدرس / الاختبار *</label>
+                                    <input type="text" id="json-lesson" required placeholder="مثال: الدرس الثاني، شامل الباب الأول..." class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-sm font-semibold focus:outline-none focus:border-blue-800">
+                                </div>
+                            </div>
+
+                            <button type="submit" id="start-json-session-btn" class="w-full py-3.5 rounded-2xl bg-blue-900 hover:bg-blue-800 text-white font-extrabold text-sm sm:text-base shadow-md flex items-center justify-center gap-2 transition-all active:scale-95">
+                                <span>ابدأ الحل الآن</span>
+                                <i class="ph-bold ph-arrow-left text-lg"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Card 2: Manual Setup Card (5 cols) -->
+                <div class="lg:col-span-5 bg-white dark:bg-slate-900 rounded-3xl p-5 sm:p-7 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-50 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300 mb-4">
+                            <i class="ph-fill ph-pencil-simple-line"></i> بدون ذكاء اصطناعي
+                        </span>
+                        <h2 class="text-xl sm:text-2xl font-extrabold mb-2">إدخال يدوي سريع</h2>
+                        <p class="text-sm text-slate-500 dark:text-slate-400 mb-5 leading-relaxed">
+                            مفيش ملف JSON؟ تقدر تفتح بابل شيت فاضي فوراً بعدد الأسئلة اللي عايزه (واجب، تدريب، أو اختبار)، تحل إجاباتك الأول وبعدين تنقل الإجابات الصح من آخر الكتاب للتصحيح الفوري!
+                        </p>
+                    </div>
+
+                    <div class="space-y-3">
+                        <button onclick="openManualSetupModal()" class="w-full py-4 px-5 rounded-2xl bg-slate-900 hover:bg-slate-800 dark:bg-slate-800 dark:hover:bg-slate-700 text-white font-bold text-sm sm:text-base shadow-md flex items-center justify-center gap-2 transition-all active:scale-95">
+                            <i class="ph-bold ph-plus-circle text-xl"></i>
+                            <span>إنشاء جلسة يدوية جديدة</span>
+                        </button>
+                        <button onclick="openPromptModal()" class="w-full py-3 px-4 rounded-2xl border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800/60 text-slate-700 dark:text-slate-300 font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition-colors">
+                            <i class="ph-bold ph-magic-wand text-lg text-blue-800 dark:text-blue-400"></i>
+                            <span>عرض برومت استخراج الأسئلة لـ Gemini</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Shared Datalists for Autocomplete -->
+            <datalist id="subjects-datalist">
+                <option value="فيزياء">
+                <option value="كيمياء">
+                <option value="أحياء">
+                <option value="رياضيات">
+                <option value="لغة عربية">
+                <option value="لغة إنجليزية">
+                <option value="تاريخ">
+                <option value="جغرافيا">
+            </datalist>
+            <datalist id="books-datalist">
+                <option value="كتاب الامتحان">
+                <option value="كتاب المعاصر">
+                <option value="كتاب الوافي">
+                <option value="كتاب مندليف">
+                <option value="كتاب التفوق">
+                <option value="مذكرة المدرس">
+            </datalist>
+
+            <!-- Recent Sessions List (Quick Access + Link to Full Folders Page) -->
+            <div class="space-y-4">
+                <div class="flex flex-wrap items-center justify-between gap-2">
+                    <h3 class="text-lg sm:text-xl font-extrabold flex items-center gap-2">
+                        <i class="ph-bold ph-clock-counter-clockwise text-blue-900 dark:text-blue-400"></i>
+                        أحدث الجلسات المسجلة
+                    </h3>
+                    <div class="flex items-center gap-2">
+                        <span id="total-homeworks-count" class="text-xs font-bold text-slate-500 dark:text-slate-400 bg-slate-200/70 dark:bg-slate-800 px-3 py-1 rounded-full">0 جلسات</span>
+                        <button onclick="navigateTo('homeworks')" class="px-3.5 py-1.5 rounded-xl bg-blue-900 hover:bg-blue-800 text-white text-xs font-extrabold flex items-center gap-1.5 shadow-sm transition-colors">
+                            <i class="ph-bold ph-folders"></i>
+                            <span>عرض كل المجلدات والفلترة</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Grid of Recent Session Cards -->
+                <div id="homeworks-list-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <!-- Populated dynamically via JS -->
+                </div>
+            </div>
+        </section>
+
     </main>
+
+    <!-- ===================================================================== -->
+    <!-- PAGE-SPECIFIC MODALS (PROMPT HELPER & MANUAL SETUP)                   -->
+    <!-- ===================================================================== -->
+
+    <!-- MODAL 1: AI PROMPT HELPER MODAL -->
+    <div id="prompt-modal" class="fixed inset-0 z-50 hidden bg-slate-950/75 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-2xl w-full p-6 border border-slate-200 dark:border-slate-800 shadow-2xl space-y-4 max-h-[90vh] flex flex-col">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-10 h-10 rounded-xl bg-blue-100 dark:bg-blue-900/50 text-blue-900 dark:text-blue-300 flex items-center justify-center">
+                        <i class="ph-bold ph-magic-wand text-2xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-extrabold text-base sm:text-lg">برومت استخراج الأسئلة والإجابات (JSON)</h3>
+                        <p class="text-xs text-slate-500 dark:text-slate-400">انسخه وابعته لـ Gemini مع صور أو PDF الأسئلة والإجابات (بما فيها الجداول والرسومات)</p>
+                    </div>
+                </div>
+                <button onclick="closeModal('prompt-modal')" class="p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800">
+                    <i class="ph-bold ph-x text-lg"></i>
+                </button>
+            </div>
+
+            <div class="overflow-y-auto custom-scroll flex-1 bg-slate-950 text-slate-100 p-4 rounded-2xl text-xs sm:text-sm font-mono leading-relaxed select-all" dir="ltr" id="ai-prompt-text">أنت مساعد تعليمي ذكي متخصص في رقمنة الأسئلة ونماذج الإجابة بدقة 100%.
+قم باستخراج جميع الأسئلة وإجاباتها من الصور أو الملف المرفق وحوّلها حصرياً إلى كود JSON صالح بدون أي نص إضافي خارج الكود.
+
+قواعد مهمة جداً:
+1. لا تطلب أو تضع بيانات المادة أو اسم الكتاب أو الدرس (الطالب سيكتبها بنفسه). ركّز فقط على الأسئلة والإجابات.
+2. إذا احتوى السؤال على جدول بيانات، اكتبه بصيغة HTML table نظيفة داخل حقل "question_text" أو "question_html".
+3. إذا احتوى السؤال على رسم بياني بسيط، دائرة كهربية، شكل هندسي، أو مخطط، ارسمه بكود SVG نظيف وواضح (مع أبعاد viewBox مناسبة) داخل حقل "question_html".
+4. للمعادلات الرياضية والكيميائية، استخدم صيغة LaTeX القياسية بين علامتي $...$ للمعادلة السطرية أو $$...$$ للمعادلة المستقلة.
+5. حافظ على ترقيم الأسئلة الأصلي في الكتاب في حقل "number" (نص أو رقم، مثل "1" أو "14 (1)").
+
+الهيكل المطلوب بالضبط:
+{
+  "questions": [
+    {
+      "number": "1",
+      "type": "mcq",
+      "question_text": "نص السؤال هنا (ويمكن استخدام $LaTeX$ للمعادلات)",
+      "question_html": "اختياري: ضع هنا كود <table> أو <svg> إذا كان السؤال يحتوي على جدول أو رسم توضيحي، وإلا اتركه فارغاً",
+      "options": {
+        "أ": "نص الاختيار الأول",
+        "ب": "نص الاختيار الثاني",
+        "ج": "نص الاختيار الثالث",
+        "د": "نص الاختيار الرابع"
+      },
+      "correct_answer": "ب",
+      "explanation": "شرح مختصر لسبب صحة الإجابة إن وجد"
+    },
+    {
+      "number": "2",
+      "type": "essay",
+      "question_text": "نص السؤال المقالي",
+      "question_html": "",
+      "model_answer": "الإجابة النموذجية الكاملة للسؤال المقالي",
+      "explanation": "توزيع الدرجات أو ملاحظات إضافية"
+    }
+  ]
+}
+
+ملاحظات:
+- للأسئلة الاختيارية (mcq): يجب أن تكون "correct_answer" واحدة من المفاتيح الموجودة في "options" (مثل "أ" أو "ب" أو "ج" أو "د" أو "A" أو "B" أو "C" أو "D").
+- للأسئلة المقالية (essay): اجعل "type": "essay" وضع الإجابة النموذجية في "model_answer".</div>
+
+            <div class="flex items-center justify-end gap-2 pt-2">
+                <button onclick="closeModal('prompt-modal')" class="px-4 py-2.5 rounded-xl text-sm font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800">إغلاق</button>
+                <button onclick="copyAIPrompt()" class="px-6 py-2.5 rounded-xl text-sm font-extrabold bg-blue-900 hover:bg-blue-800 text-white flex items-center gap-2 shadow-md">
+                    <i class="ph-bold ph-copy text-lg"></i>
+                    <span>نسخ البرومت الآن</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 2: MANUAL SETUP MODAL (TWO-PHASE WORKFLOW) -->
+    <div id="manual-setup-modal" class="fixed inset-0 z-50 hidden bg-slate-950/75 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-xl w-full p-6 border border-slate-200 dark:border-slate-800 shadow-2xl space-y-5 max-h-[92vh] overflow-y-auto custom-scroll">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+                <h3 class="font-extrabold text-lg flex items-center gap-2">
+                    <i class="ph-bold ph-sliders-horizontal text-blue-900 dark:text-blue-400 text-xl"></i>
+                    إعداد جلسة يدوية جديدة
+                </h3>
+                <button onclick="closeModal('manual-setup-modal')" class="p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800">
+                    <i class="ph-bold ph-x text-lg"></i>
+                </button>
+            </div>
+
+            <form onsubmit="createManualHomework(event)" class="space-y-4">
+                <!-- Session Category Selector: واجب / تدريب / اختبار -->
+                <div>
+                    <label class="block text-xs font-extrabold mb-1.5 text-slate-700 dark:text-slate-300">نوع الجلسة *</label>
+                    <div class="grid grid-cols-3 gap-2">
+                        <label class="cursor-pointer">
+                            <input type="radio" name="manual-session-category" value="homework" checked class="peer hidden">
+                            <div class="py-2.5 px-2 rounded-xl border-2 border-slate-200 dark:border-slate-700 peer-checked:border-blue-800 peer-checked:bg-blue-50 dark:peer-checked:bg-blue-950/50 text-center font-extrabold text-xs sm:text-sm transition-all flex items-center justify-center gap-1.5">
+                                <i class="ph-bold ph-book-bookmark text-blue-700 dark:text-blue-400"></i>
+                                <span>واجب</span>
+                            </div>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="radio" name="manual-session-category" value="practice" class="peer hidden">
+                            <div class="py-2.5 px-2 rounded-xl border-2 border-slate-200 dark:border-slate-700 peer-checked:border-emerald-600 peer-checked:bg-emerald-50 dark:peer-checked:bg-emerald-950/50 text-center font-extrabold text-xs sm:text-sm transition-all flex items-center justify-center gap-1.5">
+                                <i class="ph-bold ph-target text-emerald-600 dark:text-emerald-400"></i>
+                                <span>تدريب</span>
+                            </div>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="radio" name="manual-session-category" value="exam" class="peer hidden">
+                            <div class="py-2.5 px-2 rounded-xl border-2 border-slate-200 dark:border-slate-700 peer-checked:border-amber-600 peer-checked:bg-amber-50 dark:peer-checked:bg-amber-950/50 text-center font-extrabold text-xs sm:text-sm transition-all flex items-center justify-center gap-1.5">
+                                <i class="ph-bold ph-exam text-amber-600 dark:text-amber-400"></i>
+                                <span>اختبار</span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Metadata Inputs -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold mb-1 text-slate-600 dark:text-slate-400">اسم المادة *</label>
+                        <input type="text" id="man-subject" required placeholder="مثال: فيزياء" list="subjects-datalist" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-sm font-semibold focus:outline-none focus:border-blue-800">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold mb-1 text-slate-600 dark:text-slate-400">اسم الكتاب / المصدر *</label>
+                        <input type="text" id="man-book" required placeholder="مثال: كتاب الامتحان" list="books-datalist" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-sm font-semibold focus:outline-none focus:border-blue-800">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold mb-1 text-slate-600 dark:text-slate-400">الوحدة / الفصل *</label>
+                        <input type="text" id="man-chapter" required placeholder="مثال: الفصل الأول" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-sm font-semibold focus:outline-none focus:border-blue-800">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold mb-1 text-slate-600 dark:text-slate-400">اسم أو رقم الدرس *</label>
+                        <input type="text" id="man-lesson" required placeholder="مثال: الدرس الثاني" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-sm font-semibold focus:outline-none focus:border-blue-800">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold mb-1 text-slate-600 dark:text-slate-400">عدد الأسئلة *</label>
+                        <input type="number" id="man-qcount" min="1" max="300" value="20" required class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-sm font-bold focus:outline-none focus:border-blue-800">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold mb-1 text-slate-600 dark:text-slate-400">حروف الاختيارات</label>
+                        <select id="man-lang" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-sm font-bold focus:outline-none focus:border-blue-800">
+                            <option value="ar">عربي (أ - ب - ج - د)</option>
+                            <option value="en">إنجليزي (A - B - C - D)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Two-Phase Explanation Box -->
+                <div class="p-3.5 rounded-2xl bg-blue-50/80 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800/60 space-y-1.5 text-xs">
+                    <div class="font-extrabold text-blue-950 dark:text-blue-200 flex items-center gap-1.5">
+                        <i class="ph-bold ph-info text-base text-blue-700 dark:text-blue-400"></i>
+                        <span>إزاي الوضع اليدوي بيشتغل؟ (خطوتين في البابل شيت)</span>
+                    </div>
+                    <p class="text-slate-600 dark:text-slate-300 leading-relaxed">
+                        <strong>١.</strong> أول ما تدوس "ابدأ الحل"، هتفتحلك البابل شيت تسجّل فيها <strong>إجاباتك إنت</strong>.<br>
+                        <strong>٢.</strong> لما تخلص، هتلاقي زرار فوق ينقلك لنفس البابل شيت تحط فيها <strong>نموذج الإجابة الصح</strong> من الكتاب، ويصححلك فوراً!
+                    </p>
+                </div>
+
+                <div class="flex items-center justify-end gap-2 pt-2">
+                    <button type="button" onclick="closeModal('manual-setup-modal')" class="px-4 py-2.5 rounded-xl text-sm font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800">إلغاء</button>
+                    <button type="submit" class="px-6 py-2.5 rounded-xl text-sm font-extrabold bg-blue-900 hover:bg-blue-800 text-white shadow-md flex items-center gap-2">
+                        <span>ابدأ تسجيل إجاباتك</span>
+                        <i class="ph-bold ph-arrow-left"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ===================================================================== -->
+    <!-- SHARED MODALS & INTERACTIVE ONBOARDING TUTORIAL                       -->
+    <!-- ===================================================================== -->
+
+    <!-- MODAL 0: FIRST-TIME WELCOME & INTERACTIVE GRAPHIC TUTORIAL -->
+    <div id="onboarding-modal" class="fixed inset-0 z-50 hidden bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-3 sm:p-5">
+        <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-2xl w-full p-5 sm:p-7 border border-slate-200 dark:border-slate-800 shadow-2xl relative overflow-hidden flex flex-col max-h-[92vh]">
+            
+            <button onclick="dismissTutorialForever()" class="absolute top-4 left-4 z-10 w-9 h-9 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-rose-100 hover:text-rose-600 dark:hover:bg-rose-950/60 text-slate-500 flex items-center justify-center transition-colors" title="إغلاق الشرح نهائياً">
+                <i class="ph-bold ph-x text-lg"></i>
+            </button>
+
+            <!-- STEP 0: WELCOME QUESTION -->
+            <div id="tut-step-0" class="text-center py-4 sm:py-6 space-y-5 animate-pop">
+                <div class="w-16 h-16 rounded-2xl bg-blue-900 text-white flex items-center justify-center mx-auto shadow-lg">
+                    <i class="ph-bold ph-hand-waving text-3xl"></i>
+                </div>
+                <div class="space-y-2 max-w-md mx-auto">
+                    <h2 class="text-2xl sm:text-3xl font-black">أهلاً بيك في البابل شيت الذكي! 👋</h2>
+                    <p class="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
+                        منصتك الذكية للتصحيح الفوري، متابعة مستواك، وتجميع كل غلطاتك بالكتاب والدرس عشان تقفّل أي مادة.
+                    </p>
+                </div>
+
+                <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/70 border border-slate-200 dark:border-slate-700 max-w-md mx-auto">
+                    <p class="font-extrabold text-sm sm:text-base mb-3">هل عارف طريقة استخدام التطبيق قبل كده؟</p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                        <button onclick="dismissTutorialForever()" class="py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-sm shadow transition-all active:scale-95">
+                            أيوه، عارف ✅
+                        </button>
+                        <button onclick="goToTutorialStep(1)" class="py-3 px-4 rounded-xl bg-blue-900 hover:bg-blue-800 text-white font-extrabold text-sm shadow transition-all active:scale-95 flex items-center justify-center gap-1.5">
+                            <i class="ph-bold ph-play-circle text-lg"></i>
+                            <span>لأ، ورّيني الشرح</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 1 -->
+            <div id="tut-step-1" class="hidden space-y-4 overflow-y-auto custom-scroll pr-1 animate-pop">
+                <div class="flex items-center gap-2 text-xs font-extrabold text-blue-800 dark:text-blue-400">
+                    <span class="px-2.5 py-0.5 rounded-full bg-blue-100 dark:bg-blue-950">خطوة ١ من ٣</span>
+                    <span>ازاي تحوّل صور الأسئلة ونموذج الإجابة لملف جاهز؟</span>
+                </div>
+                <h3 class="text-lg sm:text-xl font-black">المحادثة السحرية مع Gemini ✨</h3>
+                <div class="rounded-2xl bg-slate-950 text-slate-100 p-4 sm:p-5 border border-slate-800 shadow-inner space-y-3 relative overflow-hidden">
+                    <div id="tut-anim-stage-1" class="space-y-3 py-1">
+                        <div class="anim-msg-1 flex flex-col items-start gap-1.5 max-w-[88%]">
+                            <div class="px-3.5 py-2.5 rounded-2xl rounded-tr-sm bg-blue-600 text-white text-xs leading-relaxed shadow">
+                                📋 <strong>[لصق البرومت المنسوخ من الموقع] + صور الأسئلة والإجابات</strong>
+                            </div>
+                        </div>
+                        <div class="anim-msg-2 flex flex-col items-end gap-1.5">
+                            <div class="p-3 rounded-2xl rounded-tl-sm bg-slate-900 border border-emerald-500/40 flex items-center justify-between gap-4 w-full sm:w-80 shadow-lg">
+                                <div class="flex items-center gap-2.5">
+                                    <div class="w-9 h-9 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center">
+                                        <i class="ph-bold ph-file-code text-xl"></i>
+                                    </div>
+                                    <div>
+                                        <span class="font-en text-xs font-bold text-white block">questions_key.json</span>
+                                        <span class="text-[10px] text-emerald-400">شامل الجداول والرسومات والمعادلات</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                    <strong>ملخص الخطوة:</strong> بتنسخ البرومت، تبعته لـ Gemini مع صور الأسئلة والإجابات، وبعدين بترفع ملف الـ <code class="font-en">JSON</code> هنا وتكتب اسم المادة والدرس ونوع الجلسة (واجب / تدريب / اختبار).
+                </p>
+                <div class="flex items-center justify-between pt-2 border-t border-slate-100 dark:border-slate-800">
+                    <button onclick="goToTutorialStep(0)" class="px-4 py-2 rounded-xl text-xs font-bold text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800">السابق</button>
+                    <button onclick="goToTutorialStep(2)" class="px-6 py-2.5 rounded-xl bg-blue-900 hover:bg-blue-800 text-white font-extrabold text-xs sm:text-sm flex items-center gap-1.5 shadow">
+                        <span>الخطوة التالية: الحل والتصحيح</span>
+                        <i class="ph-bold ph-arrow-left"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- STEP 2 -->
+            <div id="tut-step-2" class="hidden space-y-4 overflow-y-auto custom-scroll pr-1 animate-pop">
+                <div class="flex items-center gap-2 text-xs font-extrabold text-emerald-700 dark:text-emerald-400">
+                    <span class="px-2.5 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950">خطوة ٢ من ٣</span>
+                    <span>بابل شيت ذكي بوضعين للحل وتسليم مرن ⚡</span>
+                </div>
+                <div class="rounded-2xl bg-slate-100 dark:bg-slate-800/70 p-4 border border-slate-200 dark:border-slate-700 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div class="p-3.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 space-y-1.5">
+                        <div class="flex items-center gap-2 font-extrabold text-xs text-blue-900 dark:text-blue-400">
+                            <i class="ph-fill ph-lightning text-amber-500 text-base"></i>
+                            <span>النمط السريع vs النمط العادي</span>
+                        </div>
+                        <p class="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed">
+                            لو بتنقل إجاباتك من الكراسة بسرعة، فعّل <strong>النمط السريع</strong> وهينقلك للسؤال اللي بعده أوتوماتيك أول ما تختار!
+                        </p>
+                    </div>
+                    <div class="p-3.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 space-y-1.5">
+                        <div class="flex items-center gap-2 font-extrabold text-xs text-emerald-700 dark:text-emerald-400">
+                            <i class="ph-bold ph-check-circle text-base"></i>
+                            <span>التسليم الجزئي الذكي</span>
+                        </div>
+                        <p class="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed">
+                            حليت ٢٠ سؤال من ٥٠ بس؟ اختار <strong>"هسلم دول بس"</strong> وهيصححلك الـ ٢٠ من غير ما يحرقلك إجابات الباقي!
+                        </p>
+                    </div>
+                </div>
+                <div class="flex items-center justify-between pt-2 border-t border-slate-100 dark:border-slate-800">
+                    <button onclick="goToTutorialStep(1)" class="px-4 py-2 rounded-xl text-xs font-bold text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800">السابق</button>
+                    <button onclick="goToTutorialStep(3)" class="px-6 py-2.5 rounded-xl bg-blue-900 hover:bg-blue-800 text-white font-extrabold text-xs sm:text-sm flex items-center gap-1.5 shadow">
+                        <span>الخطوة التالية: بنك أخطائي</span>
+                        <i class="ph-bold ph-arrow-left"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- STEP 3 -->
+            <div id="tut-step-3" class="hidden space-y-4 overflow-y-auto custom-scroll pr-1 animate-pop">
+                <div class="flex items-center gap-2 text-xs font-extrabold text-rose-700 dark:text-rose-400">
+                    <span class="px-2.5 py-0.5 rounded-full bg-rose-100 dark:bg-rose-950">خطوة ٣ من ٣</span>
+                    <span>سر التفوق: أرشيف "أخطائي"</span>
+                </div>
+                <h3 class="text-lg sm:text-xl font-black">احفظ صورة السؤال الغلط واختبر نفسك فيه! 🎯</h3>
+                <div class="p-4 rounded-2xl bg-rose-50/70 dark:bg-rose-950/20 border border-rose-200 dark:border-rose-900/50 space-y-2.5 text-xs sm:text-sm text-slate-700 dark:text-slate-200">
+                    <div class="flex items-start gap-2.5">
+                        <i class="ph-bold ph-camera-plus text-xl text-rose-600 shrink-0 mt-0.5"></i>
+                        <p>كل غلطة بتتحفظ تلقائياً بنص السؤال وجداوله ورسوماته، وكمان تقدر ترفع صورة إضافية أو ملاحظة، وتختبر نفسك في غلطاتك في أي وقت!</p>
+                    </div>
+                </div>
+                <div class="flex items-center justify-between pt-2 border-t border-slate-100 dark:border-slate-800">
+                    <button onclick="goToTutorialStep(2)" class="px-4 py-2 rounded-xl text-xs font-bold text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800">السابق</button>
+                    <button onclick="dismissTutorialForever()" class="px-7 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-sm shadow-lg flex items-center gap-2 transition-transform active:scale-95">
+                        <span>يلا نبدأ المذاكرة!</span>
+                        <i class="ph-bold ph-rocket-launch text-lg"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 3: BACKUP & RESTORE DATA PORTABILITY -->
+    <div id="backup-modal" class="fixed inset-0 z-50 hidden bg-slate-950/75 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-lg w-full p-6 border border-slate-200 dark:border-slate-800 shadow-2xl space-y-5">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+                <h3 class="font-extrabold text-lg flex items-center gap-2">
+                    <i class="ph-bold ph-database text-emerald-600 text-2xl"></i>
+                    النسخ الاحتياطي ونقل البيانات
+                </h3>
+                <button onclick="closeModal('backup-modal')" class="p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800">
+                    <i class="ph-bold ph-x text-lg"></i>
+                </button>
+            </div>
+            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                بياناتك محفوظة محلياً على المتصفح. تقدر تاخد <strong>نسخة احتياطية كاملة</strong> (شاملة كل الجلسات، تقدمك، أرشيف أخطائك، والصور والملاحظات المرفقة) عشان تفتحها على أي جهاز تاني!
+            </p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <button onclick="exportFullBackup()" class="p-4 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm flex flex-col items-center justify-center gap-2 shadow-md transition-all">
+                    <i class="ph-bold ph-download-simple text-2xl"></i>
+                    <span>تصدير نسخة كاملة (.json)</span>
+                </button>
+                <label class="cursor-pointer p-4 rounded-2xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 font-bold text-sm flex flex-col items-center justify-center gap-2 border border-slate-300 dark:border-slate-700 transition-all">
+                    <input type="file" accept=".json,application/json" class="hidden" onchange="importFullBackup(event)">
+                    <i class="ph-bold ph-upload-simple text-2xl text-blue-800 dark:text-blue-400"></i>
+                    <span>استيراد نسخة احتياطية</span>
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 5: IMAGE LIGHTBOX PREVIEW -->
+    <div id="image-lightbox-modal" onclick="closeModal('image-lightbox-modal')" class="fixed inset-0 z-50 hidden bg-slate-950/90 backdrop-blur-sm flex items-center justify-center p-4 cursor-zoom-out">
+        <div class="relative max-w-4xl max-h-[90vh]">
+            <button onclick="closeModal('image-lightbox-modal')" class="absolute -top-10 left-0 text-white hover:text-rose-400 flex items-center gap-1 text-sm font-bold">
+                <i class="ph-bold ph-x text-xl"></i> إغلاق
+            </button>
+            <img id="lightbox-img-el" src="" alt="معاينة الصورة" class="max-w-full max-h-[85vh] rounded-2xl shadow-2xl object-contain bg-white">
+        </div>
+    </div>
+
+    <!-- MODAL 6: FIRST-TIME USER PROFILE / RESTORE BACKUP ONBOARDING -->
+    <div id="user-init-modal" class="fixed inset-0 z-[60] hidden bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-5">
+        <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-lg w-full p-5 sm:p-7 border border-slate-200 dark:border-slate-800 shadow-2xl space-y-5 max-h-[92vh] overflow-y-auto custom-scroll animate-pop">
+            <div id="user-init-step-ask" class="text-center space-y-5 py-2">
+                <div class="w-16 h-16 rounded-2xl bg-blue-900 text-white flex items-center justify-center mx-auto shadow-lg">
+                    <i class="ph-bold ph-user-focus text-3xl"></i>
+                </div>
+                <div class="space-y-1.5">
+                    <h2 class="text-xl sm:text-2xl font-black">أهلاً بيك! شكلك داخل من جهاز جديد 👋</h2>
+                    <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
+                        ملقيناش ملف بياناتك متسجل على المتصفح ده. هل دخلت الموقع قبل كدة ومعاك ملف احتياطي؟
+                    </p>
+                </div>
+                <div class="grid grid-cols-1 gap-3 pt-1">
+                    <button type="button" onclick="showUserInitStep('restore')" class="p-4 rounded-2xl border-2 border-emerald-600 bg-emerald-50/70 dark:bg-emerald-950/40 hover:bg-emerald-100 dark:hover:bg-emerald-900/50 text-right flex items-center justify-between transition-all">
+                        <div>
+                            <span class="font-black text-sm sm:text-base text-emerald-900 dark:text-emerald-200 block">أيوه، دخلت قبل كدة ومعايا ملف احتياطي 📂</span>
+                            <span class="text-xs text-slate-600 dark:text-slate-400">ارفع ملفك عشان نرجّع كل جلساتك وأخطائك واسمك فوراً</span>
+                        </div>
+                        <i class="ph-bold ph-arrow-left text-xl text-emerald-700 dark:text-emerald-400 shrink-0"></i>
+                    </button>
+                    <button type="button" onclick="showUserInitStep('new')" class="p-4 rounded-2xl border-2 border-blue-800 bg-blue-50/70 dark:bg-blue-950/40 hover:bg-blue-100 dark:hover:bg-blue-900/50 text-right flex items-center justify-between transition-all">
+                        <div>
+                            <span class="font-black text-sm sm:text-base text-blue-950 dark:text-blue-200 block">لأ، دي أول مرة أدخل الموقع ✨</span>
+                            <span class="text-xs text-slate-600 dark:text-slate-400">اعمل ملف جديد باسمك ولونك المفضل في ثواني</span>
+                        </div>
+                        <i class="ph-bold ph-arrow-left text-xl text-blue-800 dark:text-blue-400 shrink-0"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div id="user-init-step-restore" class="hidden space-y-4">
+                <div class="flex items-center justify-between">
+                    <button type="button" onclick="showUserInitStep('ask')" class="text-xs font-bold text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 flex items-center gap-1">
+                        <i class="ph-bold ph-arrow-right"></i> رجوع
+                    </button>
+                    <span class="text-xs font-extrabold text-emerald-700 dark:text-emerald-400">استعادة ملفك الاحتياطي</span>
+                </div>
+                <label class="cursor-pointer flex flex-col items-center justify-center border-2 border-dashed border-emerald-500 rounded-2xl p-7 bg-emerald-50/40 dark:bg-emerald-950/20 hover:bg-emerald-50 dark:hover:bg-emerald-950/40 transition-all text-center">
+                    <input type="file" accept=".json,application/json" class="hidden" onchange="handleInitialBackupRestore(event)">
+                    <div class="w-14 h-14 rounded-2xl bg-emerald-600 text-white flex items-center justify-center mb-3 shadow-md">
+                        <i class="ph-bold ph-upload-simple text-2xl"></i>
+                    </div>
+                    <span class="font-black text-sm sm:text-base">اضغط هنا لاختيار ملفك الاحتياطي (.json)</span>
+                    <span class="text-xs text-slate-500 dark:text-slate-400 mt-1">هيتم استعادة اسمك وثيمك وكل الجلسات والأخطاء تلقائياً</span>
+                </label>
+            </div>
+
+            <form id="user-init-step-new" onsubmit="saveNewUserProfile(event)" class="hidden space-y-4">
+                <div class="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-slate-800">
+                    <button type="button" onclick="showUserInitStep('ask')" class="text-xs font-bold text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 flex items-center gap-1">
+                        <i class="ph-bold ph-arrow-right"></i> رجوع
+                    </button>
+                    <h3 class="font-black text-base">تجهيز ملفك الشخصي</h3>
+                </div>
+                <div>
+                    <label class="block text-xs font-extrabold mb-1.5 text-slate-700 dark:text-slate-300">اسمك إيه؟ *</label>
+                    <input type="text" id="init-user-name" required placeholder="اكتب اسمك هنا..." class="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-sm font-bold focus:outline-none focus:border-blue-800">
+                </div>
+                <div>
+                    <label class="block text-xs font-extrabold mb-1.5 text-slate-700 dark:text-slate-300">النوع *</label>
+                    <div class="grid grid-cols-2 gap-3">
+                        <label class="cursor-pointer">
+                            <input type="radio" name="init-gender" value="male" required class="peer hidden" onchange="suggestThemeByGender('male')">
+                            <div class="p-3 rounded-xl border-2 border-slate-200 dark:border-slate-700 peer-checked:border-blue-800 peer-checked:bg-blue-50 dark:peer-checked:bg-blue-950/50 text-center font-extrabold text-sm transition-all">ذكر 👦</div>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="radio" name="init-gender" value="female" required class="peer hidden" onchange="suggestThemeByGender('female')">
+                            <div class="p-3 rounded-xl border-2 border-slate-200 dark:border-slate-700 peer-checked:border-pink-600 peer-checked:bg-pink-50 dark:peer-checked:bg-pink-950/50 text-center font-extrabold text-sm transition-all">أنثى 👧</div>
+                        </label>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-extrabold mb-2 text-slate-700 dark:text-slate-300">اختار ثيم اللون اللي تحبه للموقع 🎨</label>
+                    <div class="grid grid-cols-5 gap-2" id="init-theme-picker">
+                        <button type="button" onclick="selectInitColorTheme('blue')" data-tval="blue" class="init-theme-btn p-2.5 rounded-xl border-2 border-blue-900 bg-blue-50 dark:bg-blue-950/50 flex flex-col items-center gap-1.5 transition-all">
+                            <span class="w-6 h-6 rounded-full bg-[#1e3a8a] shadow-sm"></span>
+                            <span class="text-[11px] font-extrabold">أزرق</span>
+                        </button>
+                        <button type="button" onclick="selectInitColorTheme('pink')" data-tval="pink" class="init-theme-btn p-2.5 rounded-xl border-2 border-slate-200 dark:border-slate-700 flex flex-col items-center gap-1.5 transition-all">
+                            <span class="w-6 h-6 rounded-full bg-[#db2777] shadow-sm"></span>
+                            <span class="text-[11px] font-extrabold">بينك</span>
+                        </button>
+                        <button type="button" onclick="selectInitColorTheme('green')" data-tval="green" class="init-theme-btn p-2.5 rounded-xl border-2 border-slate-200 dark:border-slate-700 flex flex-col items-center gap-1.5 transition-all">
+                            <span class="w-6 h-6 rounded-full bg-[#059669] shadow-sm"></span>
+                            <span class="text-[11px] font-extrabold">أخضر</span>
+                        </button>
+                        <button type="button" onclick="selectInitColorTheme('red')" data-tval="red" class="init-theme-btn p-2.5 rounded-xl border-2 border-slate-200 dark:border-slate-700 flex flex-col items-center gap-1.5 transition-all">
+                            <span class="w-6 h-6 rounded-full bg-[#dc2626] shadow-sm"></span>
+                            <span class="text-[11px] font-extrabold">أحمر</span>
+                        </button>
+                        <button type="button" onclick="selectInitColorTheme('purple')" data-tval="purple" class="init-theme-btn p-2.5 rounded-xl border-2 border-slate-200 dark:border-slate-700 flex flex-col items-center gap-1.5 transition-all">
+                            <span class="w-6 h-6 rounded-full bg-[#7c3aed] shadow-sm"></span>
+                            <span class="text-[11px] font-extrabold">بنفسجي</span>
+                        </button>
+                    </div>
+                </div>
+                <button type="submit" class="w-full py-3.5 rounded-2xl bg-blue-900 hover:bg-blue-800 text-white font-extrabold text-sm shadow-lg flex items-center justify-center gap-2 transition-all active:scale-95">
+                    <span>حفظ وبدء الاستخدام</span>
+                    <i class="ph-bold ph-check-circle text-lg"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL 7: PROFILE, THEME SWITCHER & BACKUP FILE DOWNLOAD -->
+    <div id="profile-settings-modal" class="fixed inset-0 z-50 hidden bg-slate-950/75 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-md w-full p-6 border border-slate-200 dark:border-slate-800 shadow-2xl space-y-5">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+                <h3 class="font-extrabold text-lg flex items-center gap-2">
+                    <i class="ph-bold ph-user-circle text-blue-900 dark:text-blue-400 text-2xl"></i>
+                    ملفي الشخصي والثيمات
+                </h3>
+                <button onclick="closeModal('profile-settings-modal')" class="p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800">
+                    <i class="ph-bold ph-x text-lg"></i>
+                </button>
+            </div>
+            <form onsubmit="updateExistingUserProfile(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold mb-1 text-slate-600 dark:text-slate-400">الاسم</label>
+                    <input type="text" id="edit-user-name" required class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-sm font-bold">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold mb-1 text-slate-600 dark:text-slate-400">النوع</label>
+                    <div class="grid grid-cols-2 gap-2.5">
+                        <label class="cursor-pointer">
+                            <input type="radio" name="edit-gender" value="male" class="peer hidden">
+                            <div class="p-2.5 rounded-xl border-2 border-slate-200 dark:border-slate-700 peer-checked:border-blue-800 peer-checked:bg-blue-50 dark:peer-checked:bg-blue-950/50 text-center font-bold text-xs">ذكر 👦</div>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="radio" name="edit-gender" value="female" class="peer hidden">
+                            <div class="p-2.5 rounded-xl border-2 border-slate-200 dark:border-slate-700 peer-checked:border-pink-600 peer-checked:bg-pink-50 dark:peer-checked:bg-pink-950/50 text-center font-bold text-xs">أنثى 👧</div>
+                        </label>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold mb-2 text-slate-600 dark:text-slate-400">لون الموقع (يشتغل مع الليلي والنهاري)</label>
+                    <div class="grid grid-cols-5 gap-2">
+                        <button type="button" onclick="applyColorTheme('blue', true)" data-edit-tval="blue" class="edit-theme-btn p-2 rounded-xl border-2 border-slate-200 dark:border-slate-700 flex flex-col items-center gap-1">
+                            <span class="w-6 h-6 rounded-full bg-[#1e3a8a]"></span>
+                            <span class="text-[11px] font-bold">أزرق</span>
+                        </button>
+                        <button type="button" onclick="applyColorTheme('pink', true)" data-edit-tval="pink" class="edit-theme-btn p-2 rounded-xl border-2 border-slate-200 dark:border-slate-700 flex flex-col items-center gap-1">
+                            <span class="w-6 h-6 rounded-full bg-[#db2777]"></span>
+                            <span class="text-[11px] font-bold">بينك</span>
+                        </button>
+                        <button type="button" onclick="applyColorTheme('green', true)" data-edit-tval="green" class="edit-theme-btn p-2 rounded-xl border-2 border-slate-200 dark:border-slate-700 flex flex-col items-center gap-1">
+                            <span class="w-6 h-6 rounded-full bg-[#059669]"></span>
+                            <span class="text-[11px] font-bold">أخضر</span>
+                        </button>
+                        <button type="button" onclick="applyColorTheme('red', true)" data-edit-tval="red" class="edit-theme-btn p-2 rounded-xl border-2 border-slate-200 dark:border-slate-700 flex flex-col items-center gap-1">
+                            <span class="w-6 h-6 rounded-full bg-[#dc2626]"></span>
+                            <span class="text-[11px] font-bold">أحمر</span>
+                        </button>
+                        <button type="button" onclick="applyColorTheme('purple', true)" data-edit-tval="purple" class="edit-theme-btn p-2 rounded-xl border-2 border-slate-200 dark:border-slate-700 flex flex-col items-center gap-1">
+                            <span class="w-6 h-6 rounded-full bg-[#7c3aed]"></span>
+                            <span class="text-[11px] font-bold">بنفسجي</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="pt-2 flex items-center justify-between gap-2">
+                    <button type="button" onclick="exportFullBackup()" class="px-3.5 py-2.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 text-xs font-extrabold flex items-center gap-1.5">
+                        <i class="ph-bold ph-download-simple text-base"></i>
+                        <span>تحميل ملفي الاحتياطي</span>
+                    </button>
+                    <button type="submit" class="px-5 py-2.5 rounded-xl bg-blue-900 hover:bg-blue-800 text-white text-xs font-extrabold">حفظ التعديلات</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- TOAST NOTIFICATION CONTAINER -->
+    <div id="toast-container" class="fixed bottom-5 left-5 right-5 sm:left-auto sm:right-6 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
     <script src="app.js"></script>
 </body>
 </html>

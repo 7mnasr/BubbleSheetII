@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <title>حل الجلسة | البابل شيت الذكي</title>
+    <!-- Favicon & Home Screen App Icon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%25' stop-color='%231e3a8a'/%3E%3Cstop offset='100%25' stop-color='%233b82f6'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='16' fill='url(%23g)'/%3E%3Crect x='14' y='16' width='14' height='14' rx='4' fill='none' stroke='%23ffffff' stroke-width='3.5'/%3E%3Cpath d='M17.5 23l3 3 5.5-6' fill='none' stroke='%2334d399' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cline x1='34' y1='23' x2='50' y2='23' stroke='%23ffffff' stroke-width='3.5' stroke-linecap='round'/%3E%3Crect x='14' y='36' width='14' height='14' rx='4' fill='none' stroke='%23ffffff' stroke-width='3.5'/%3E%3Cpath d='M17.5 43l3 3 5.5-6' fill='none' stroke='%2334d399' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cline x1='34' y1='43' x2='50' y2='43' stroke='%23ffffff' stroke-width='3.5' stroke-linecap='round'/%3E%3C/svg%3E">
+    <link rel="apple-touch-icon" id="apple-touch-icon-link" href="">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="البابل شيت الذكي">
+    <meta name="application-name" content="البابل شيت الذكي">
+    <meta name="theme-color" id="meta-theme-color" content="#1e3a8a">
+
+    <!-- Google Fonts: Cairo & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Inter:wght@500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Lightweight KaTeX (Deferred so it never blocks page load) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Cairo', 'sans-serif'],
+                        en: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        navy: {
+                            800: '#1e3a8a',
+                            900: '#172554',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <!-- Shared Styles -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="solve" class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 min-h-screen flex flex-col">
+
+    <!-- TOP NAVIGATION HEADER -->
+    <header class="sticky top-0 z-40 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 shadow-sm">
+        <div class="max-w-7xl mx-auto px-3 sm:px-6 h-16 flex items-center justify-between gap-2">
+            <button onclick="navigateTo('home')" class="flex items-center gap-2.5 text-right group focus:outline-none">
+                <div class="w-10 h-10 rounded-xl bg-blue-900 dark:bg-blue-700 text-white flex items-center justify-center shadow-md group-hover:scale-105 transition-transform">
+                    <i class="ph-bold ph-check-square-offset text-2xl"></i>
+                </div>
+                <div>
+                    <h1 class="font-extrabold text-base sm:text-lg leading-tight text-slate-900 dark:text-white">البابل شيت الذكي</h1>
+                    <p class="text-[11px] text-slate-500 dark:text-slate-400 hidden sm:block">تصحيح فوري وتحليل ذكي لأخطائك</p>
+                </div>
+            </button>
+
+            <div class="flex items-center gap-1.5 sm:gap-2.5">
+                <button onclick="openProfileSettingsModal()" id="header-user-pill" class="px-2.5 sm:px-3 py-2 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-1.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-100 border border-slate-200 dark:border-slate-700 transition-colors" title="ملفي الشخصي والألوان">
+                    <i id="header-user-icon" class="ph-fill ph-user-circle text-lg text-blue-900 dark:text-blue-400"></i>
+                    <span id="header-user-name" class="max-w-[85px] sm:max-w-[120px] truncate">حسابي</span>
+                </button>
+
+                <button onclick="openTutorialFromStart()" class="px-2.5 sm:px-3 py-2 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-1.5 text-indigo-700 bg-indigo-50 hover:bg-indigo-100 dark:bg-indigo-950/60 dark:text-indigo-300 dark:hover:bg-indigo-900/60 border border-indigo-200 dark:border-indigo-800 transition-colors" title="شرح طريقة استخدام الموقع">
+                    <i class="ph-bold ph-question text-lg"></i>
+                    <span class="hidden sm:inline">شرح الاستخدام</span>
+                </button>
+
+                <button onclick="navigateTo('home')" id="nav-home-btn" class="px-3 py-2 rounded-xl text-sm font-bold flex items-center gap-1.5 transition-colors text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800">
+                    <i class="ph-bold ph-house text-lg"></i>
+                    <span class="hidden md:inline">الرئيسية</span>
+                </button>
+
+                <button onclick="navigateTo('library')" id="nav-library-btn" class="px-3 py-2 rounded-xl text-sm font-bold flex items-center gap-1.5 transition-colors text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800">
+                    <i class="ph-bold ph-books text-lg text-amber-600 dark:text-amber-400"></i>
+                    <span>المكتبة</span>
+                </button>
+
+                <button onclick="navigateTo('homeworks')" id="nav-homeworks-btn" class="px-3 py-2 rounded-xl text-sm font-bold flex items-center gap-1.5 transition-colors text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800">
+                    <i class="ph-bold ph-folders text-lg text-blue-900 dark:text-blue-400"></i>
+                    <span>سجل الحل</span>
+                </button>
+
+                <button onclick="navigateTo('mistakes')" id="nav-mistakes-btn" class="relative px-3 py-2 rounded-xl text-sm font-bold flex items-center gap-1.5 transition-colors text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800">
+                    <i class="ph-bold ph-warning-circle text-lg text-rose-500"></i>
+                    <span>أخطائي</span>
+                    <span id="mistakes-badge" class="bg-rose-500 text-white text-xs font-extrabold px-2 py-0.5 rounded-full min-w-[22px] text-center">0</span>
+                </button>
+
+                <button onclick="openBackupModal()" class="p-2.5 sm:px-3 sm:py-2 rounded-xl text-sm font-bold flex items-center gap-1.5 text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-700 transition-colors" title="النسخ الاحتياطي ونقل البيانات">
+                    <i class="ph-bold ph-cloud-arrow-up text-lg text-emerald-600 dark:text-emerald-400"></i>
+                    <span class="hidden lg:inline">نسخة احتياطية</span>
+                </button>
+
+                <button onclick="toggleTheme()" class="p-2.5 rounded-xl text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-700 transition-colors" title="تغيير المظهر (ليلي / نهاري)">
+                    <i id="theme-icon" class="ph-bold ph-moon text-lg"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT CONTAINER (SOLVE) -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 py-5 sm:py-8">
+
+        <section id="view-solve" class="space-y-4">
+            
+            <!-- Manual Two-Phase Banner -->
+            <div id="manual-phase-banner" class="hidden rounded-2xl p-3.5 sm:p-4 border-2 flex flex-wrap items-center justify-between gap-3 animate-pop">
+                <div class="flex items-center gap-3">
+                    <div id="manual-phase-icon" class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0">
+                        <i class="ph-bold ph-pencil-simple text-xl"></i>
+                    </div>
+                    <div>
+                        <span id="manual-phase-step-badge" class="text-[11px] font-extrabold uppercase tracking-wide px-2 py-0.5 rounded-md">المرحلة ١ من ٢</span>
+                        <h3 id="manual-phase-title" class="font-black text-sm sm:text-base mt-0.5">أنت الآن تسجّل إجاباتك</h3>
+                        <p id="manual-phase-desc" class="text-xs opacity-85">اختر إجاباتك لكل سؤال، ولما تخلص هننقلك تحط نموذج الإجابة الصح للتصحيح الفوري.</p>
+                    </div>
+                </div>
+                <button type="button" id="manual-phase-switch-btn" onclick="handleManualPhaseAction()" class="px-4 py-2.5 rounded-xl font-extrabold text-xs sm:text-sm shadow-sm flex items-center gap-1.5 transition-all active:scale-95">
+                    <span>انتقل للخطوة التالية</span>
+                    <i class="ph-bold ph-arrow-left"></i>
+                </button>
+            </div>
+
+            <!-- Top Control Bar -->
+            <div class="bg-white dark:bg-slate-900 rounded-2xl p-3 sm:p-4 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-wrap items-center justify-between gap-3">
+                <div class="flex items-center gap-2.5">
+                    <button onclick="attemptExitSolve()" class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300" title="رجوع للرئيسية">
+                        <i class="ph-bold ph-arrow-right text-lg"></i>
+                    </button>
+                    <div>
+                        <div class="flex flex-wrap items-center gap-1.5">
+                            <span id="solve-category-badge" class="px-2 py-0.5 rounded-lg text-[11px] font-extrabold bg-amber-100 text-amber-900 dark:bg-amber-900/50 dark:text-amber-300">واجب</span>
+                            <span id="solve-subject-badge" class="px-2.5 py-0.5 rounded-lg text-xs font-extrabold bg-blue-100 text-blue-900 dark:bg-blue-900/50 dark:text-blue-300">المادة</span>
+                            <h2 id="solve-title" class="font-extrabold text-sm sm:text-base truncate max-w-[200px] sm:max-w-md">اسم الكتاب • الفصل • الدرس</h2>
+                        </div>
+                        <p id="solve-progress-text" class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">تم حل 0 من 0 سؤال</p>
+                    </div>
+                </div>
+
+                <div class="flex flex-wrap items-center gap-2 w-full sm:w-auto justify-between sm:justify-end">
+                    <div class="flex items-center bg-slate-100 dark:bg-slate-800 p-1 rounded-xl border border-slate-200 dark:border-slate-700">
+                        <button type="button" id="mode-standard-btn" onclick="setSolveMode('standard')" class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all bg-white dark:bg-slate-700 text-blue-900 dark:text-white shadow-sm">
+                            عادي
+                        </button>
+                        <button type="button" id="mode-auto-btn" onclick="setSolveMode('auto')" class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all text-slate-600 dark:text-slate-400 flex items-center gap-1">
+                            <i class="ph-fill ph-lightning text-amber-500"></i> سريع (تلقائي)
+                        </button>
+                    </div>
+
+                    <button type="button" onclick="saveCurrentProgress(true)" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs sm:text-sm shadow-sm flex items-center gap-1.5 transition-all active:scale-95">
+                        <i class="ph-bold ph-floppy-disk text-base"></i>
+                        <span>حفظ (Save)</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Asymmetric Split Screen: 75% Active Question | 25% Question Map -->
+            <div class="flex flex-col md:flex-row gap-4 sm:gap-5 items-start">
+                
+                <!-- LEFT/MAIN AREA (75% width on md+): Active Question Card -->
+                <div class="w-full md:w-[75%] bg-white dark:bg-slate-900 rounded-3xl p-5 sm:p-8 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between min-h-[430px] sm:min-h-[480px]">
+                    
+                    <div>
+                        <div class="flex items-center justify-between gap-2 pb-4 mb-6 border-b border-slate-100 dark:border-slate-800">
+                            <div class="flex items-center gap-3">
+                                <span id="q-number-display" class="text-2xl sm:text-3xl font-black text-blue-900 dark:text-blue-400">سؤال ١</span>
+                                <span id="q-total-display" class="text-sm font-bold text-slate-400">من ٥٠</span>
+                                <span id="q-type-badge" class="px-2.5 py-1 rounded-lg text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">اختيار من متعدد</span>
+                            </div>
+
+                            <div class="flex flex-wrap items-center gap-2">
+                                <button type="button" id="split-subq-btn" onclick="openSubQuestionsModal()" class="px-3 py-2 rounded-xl text-xs font-extrabold bg-indigo-50 hover:bg-indigo-100 dark:bg-indigo-950/60 dark:hover:bg-indigo-900/60 text-indigo-800 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800 transition-colors flex items-center gap-1" title="تقسيم هذا السؤال أو المطلوب إلى عدة مطاليب">
+                                    <i class="ph-bold ph-git-fork text-base"></i>
+                                    <span id="split-subq-btn-text">+ فرّع السؤال لمطاليب</span>
+                                </button>
+
+                                <button type="button" id="unsplit-subq-btn" onclick="unsplitCurrentSubQuestion()" class="hidden px-3 py-2 rounded-xl text-xs font-extrabold bg-amber-50 hover:bg-amber-100 dark:bg-amber-950/60 dark:hover:bg-amber-900/60 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-800 transition-colors flex items-center gap-1" title="إلغاء تفريع هذا السؤال وإرجاعه سؤال واحد">
+                                    <i class="ph-bold ph-git-merge text-base"></i>
+                                    <span>إلغاء التفريع</span>
+                                </button>
+
+                                <button type="button" id="clear-answer-btn" onclick="clearCurrentAnswer()" class="px-3 py-2 rounded-xl text-xs font-bold text-slate-500 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors flex items-center gap-1" title="مسح إجابة هذا السؤال">
+                                    <i class="ph-bold ph-eraser text-base"></i>
+                                    <span class="hidden sm:inline">تصفير الإجابة</span>
+                                </button>
+
+                                <button type="button" id="flag-q-btn" onclick="toggleFlagCurrent()" class="px-3.5 py-2 rounded-xl text-xs font-bold border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-amber-50 dark:hover:bg-amber-950/30 transition-all flex items-center gap-1.5">
+                                    <i id="flag-icon" class="ph-bold ph-flag text-base"></i>
+                                    <span>علّم للمراجعة</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Question Content Box (Text, Rich HTML Tables/SVGs, Math, and Saved Images) -->
+                        <div id="retry-attachment-box" class="hidden mb-6 p-4 rounded-2xl bg-indigo-50/70 dark:bg-indigo-950/30 border border-indigo-200 dark:border-indigo-800/60 space-y-3">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs font-extrabold text-indigo-800 dark:text-indigo-300 flex items-center gap-1.5">
+                                    <i class="ph-bold ph-book-open-text text-base"></i> رأس السؤال والمرفقات:
+                                </span>
+                                <span id="retry-origin-meta" class="text-[11px] font-bold text-slate-500 dark:text-slate-400"></span>
+                            </div>
+                            <div id="retry-q-text" class="hidden rich-question-content text-sm sm:text-base font-bold text-slate-800 dark:text-slate-100 leading-relaxed whitespace-pre-line"></div>
+                            <div id="retry-q-html" class="hidden rich-question-content overflow-x-auto"></div>
+                            <div id="retry-q-img-wrap" class="hidden">
+                                <img id="retry-q-img" src="" alt="صورة السؤال" onclick="openImageLightbox(this.src)" class="max-h-64 rounded-xl border border-slate-300 dark:border-slate-700 cursor-zoom-in object-contain bg-white">
+                            </div>
+                        </div>
+
+                        <!-- MCQ Bubbles Area -->
+                        <div id="mcq-container" class="space-y-3 sm:space-y-4">
+                            <p id="mcq-instruction-text" class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mb-2">اختر الإجابة الصحيحة من البابل شيت (أو استخدم الكيبورد 1-4):</p>
+                            <div id="mcq-options-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4"></div>
+                        </div>
+
+                        <!-- Essay Self-Evaluation Area -->
+                        <div id="essay-container" class="hidden space-y-5">
+                            <div class="p-4 rounded-2xl bg-amber-50/70 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900/50 text-xs sm:text-sm text-amber-900 dark:text-amber-200 flex items-center gap-2.5">
+                                <i class="ph-bold ph-pencil-line text-xl shrink-0"></i>
+                                <span>اكتب إجابتك في كراستك أولاً، ثم اضغط <strong>"أظهر الإجابة النموذجية"</strong> وقارن إجابتك لتقييم نفسك.</span>
+                            </div>
+
+                            <div class="relative rounded-2xl border-2 border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/60 p-5 min-h-[120px] flex flex-col justify-center">
+                                <p class="text-xs font-bold text-slate-400 mb-2">الإجابة النموذجية:</p>
+                                <div id="essay-model-text" class="rich-question-content text-base sm:text-lg font-bold leading-relaxed essay-blur transition-all duration-300">
+                                    نص الإجابة النموذجية يظهر هنا...
+                                </div>
+                                <div id="essay-reveal-overlay" class="absolute inset-0 flex items-center justify-center bg-slate-100/60 dark:bg-slate-900/60 backdrop-blur-[2px] rounded-2xl">
+                                    <button type="button" onclick="revealEssayAnswer()" class="px-5 py-3 rounded-xl bg-blue-900 hover:bg-blue-800 text-white font-extrabold text-sm shadow-lg flex items-center gap-2 transition-transform active:scale-95">
+                                        <i class="ph-bold ph-eye text-lg"></i>
+                                        <span>أظهر الإجابة النموذجية</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div id="essay-grading-box" class="hidden space-y-2.5 pt-2">
+                                <label class="block text-xs sm:text-sm font-extrabold text-slate-700 dark:text-slate-300">قيّم إجابتك بناءً على مطابقتها للنموذج (من ٢):</label>
+                                <div class="grid grid-cols-5 gap-2 sm:gap-3">
+                                    <button type="button" onclick="gradeEssay(0)" data-score="0" class="essay-score-btn py-3.5 rounded-xl font-black text-base sm:text-lg border-2 border-slate-200 dark:border-slate-700 hover:border-rose-500 transition-all">0</button>
+                                    <button type="button" onclick="gradeEssay(0.5)" data-score="0.5" class="essay-score-btn py-3.5 rounded-xl font-black text-base sm:text-lg border-2 border-slate-200 dark:border-slate-700 hover:border-amber-500 transition-all">0.5</button>
+                                    <button type="button" onclick="gradeEssay(1)" data-score="1" class="essay-score-btn py-3.5 rounded-xl font-black text-base sm:text-lg border-2 border-slate-200 dark:border-slate-700 hover:border-amber-500 transition-all">1</button>
+                                    <button type="button" onclick="gradeEssay(1.5)" data-score="1.5" class="essay-score-btn py-3.5 rounded-xl font-black text-base sm:text-lg border-2 border-slate-200 dark:border-slate-700 hover:border-amber-500 transition-all">1.5</button>
+                                    <button type="button" onclick="gradeEssay(2)" data-score="2" class="essay-score-btn py-3.5 rounded-xl font-black text-base sm:text-lg border-2 border-slate-200 dark:border-slate-700 hover:border-emerald-500 transition-all">2</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bottom Navigation Controls -->
+                    <div class="pt-6 mt-8 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between gap-3">
+                        <button type="button" id="prev-q-btn" onclick="prevQuestion()" class="px-5 py-3.5 rounded-2xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-bold text-sm sm:text-base flex items-center gap-2 transition-all disabled:opacity-40">
+                            <i class="ph-bold ph-arrow-right text-lg"></i>
+                            <span>السابق</span>
+                        </button>
+
+                        <button type="button" id="main-submit-btn" onclick="initiateSubmitHomework()" class="px-5 sm:px-7 py-3.5 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-sm sm:text-base shadow-md flex items-center gap-2 transition-all active:scale-95">
+                            <i class="ph-bold ph-paper-plane-tilt text-lg"></i>
+                            <span id="main-submit-btn-text">تسليم الجلسة</span>
+                        </button>
+
+                        <button type="button" id="next-q-btn" onclick="nextQuestion()" class="px-5 py-3.5 rounded-2xl bg-blue-900 hover:bg-blue-800 text-white font-bold text-sm sm:text-base flex items-center gap-2 transition-all disabled:opacity-40">
+                            <span>التالي</span>
+                            <i class="ph-bold ph-arrow-left text-lg"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- RIGHT/SIDEBAR AREA (25% width on md+): Sticky Question Map -->
+                <aside class="w-full md:w-[25%] bg-white dark:bg-slate-900 rounded-3xl p-4 sm:p-5 border border-slate-200 dark:border-slate-800 shadow-sm md:sticky md:top-20">
+                    <div class="flex items-center justify-between mb-3">
+                        <h3 class="font-extrabold text-sm flex items-center gap-1.5">
+                            <i class="ph-bold ph-grid-four text-blue-900 dark:text-blue-400"></i>
+                            خريطة الأسئلة
+                        </h3>
+                        <span id="map-answered-ratio" class="text-xs font-extrabold text-blue-900 dark:text-blue-300 bg-blue-50 dark:bg-blue-950/60 px-2.5 py-1 rounded-lg">0 / 0</span>
+                    </div>
+
+                    <div class="flex flex-wrap items-center gap-3 text-[11px] text-slate-500 dark:text-slate-400 mb-3 pb-2.5 border-b border-slate-100 dark:border-slate-800">
+                        <span class="flex items-center gap-1"><span id="legend-answered-dot" class="w-3 h-3 rounded bg-blue-900 inline-block"></span> <span id="legend-answered-label">متجاوب</span></span>
+                        <span class="flex items-center gap-1"><span class="w-3 h-3 rounded bg-slate-200/70 dark:bg-slate-800 inline-block"></span> فاضي</span>
+                        <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-amber-500 inline-block"></span> مراجعة</span>
+                    </div>
+
+                    <div id="question-map-grid" class="grid grid-cols-6 sm:grid-cols-8 md:grid-cols-4 lg:grid-cols-5 gap-2 max-h-[260px] md:max-h-[380px] overflow-y-auto custom-scroll p-1"></div>
+                </aside>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- MODAL 2: SMART PARTIAL SUBMISSION MODAL -->
+    <div id="partial-submit-modal" class="fixed inset-0 z-50 hidden bg-slate-950/75 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-lg w-full p-6 border border-slate-200 dark:border-slate-800 shadow-2xl space-y-5">
+            <div class="flex items-center gap-3 text-amber-600 dark:text-amber-400">
+                <div class="w-12 h-12 rounded-2xl bg-amber-100 dark:bg-amber-900/40 flex items-center justify-center shrink-0">
+                    <i class="ph-bold ph-warning text-2xl"></i>
+                </div>
+                <div>
+                    <h3 class="font-black text-lg text-slate-900 dark:text-white">فيه أسئلة لسه متجاوبتش!</h3>
+                    <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
+                        إنت سايب <strong id="unanswered-modal-count" class="text-amber-600 dark:text-amber-400">0</strong> سؤال فاضي من إجمالي <span id="total-modal-count">0</span> سؤال. تحب تعمل إيه؟
+                    </p>
+                </div>
+            </div>
+
+            <div class="space-y-2.5">
+                <button onclick="closeModal('partial-submit-modal')" class="w-full p-4 rounded-2xl border-2 border-slate-200 dark:border-slate-700 hover:border-blue-800 dark:hover:border-blue-500 text-right flex items-center justify-between transition-all group">
+                    <div>
+                        <span class="font-extrabold text-sm sm:text-base block group-hover:text-blue-800 dark:group-hover:text-blue-400">١. لا، رجّعني أكمل</span>
+                        <span class="text-xs text-slate-500 dark:text-slate-400">ارجع للبابل شيت وكمل باقي الأسئلة الفاضية</span>
+                    </div>
+                    <i class="ph-bold ph-arrow-left text-lg text-slate-400"></i>
+                </button>
+
+                <button onclick="finalizeSubmission('partial')" class="w-full p-4 rounded-2xl border-2 border-blue-800/30 bg-blue-50/60 dark:bg-blue-950/30 hover:border-blue-800 text-right flex items-center justify-between transition-all">
+                    <div>
+                        <span class="font-extrabold text-sm sm:text-base text-blue-950 dark:text-blue-200 block">٢. أنا هسلم دول بس (تسليم جزئي)</span>
+                        <span class="text-xs text-slate-600 dark:text-slate-400">احسب درجتي على اللي حليته بس، ومتحرقش إجابات الباقي عشان أكملهم بعدين</span>
+                    </div>
+                    <i class="ph-bold ph-check-circle text-xl text-blue-800 dark:text-blue-400 shrink-0"></i>
+                </button>
+
+                <button onclick="finalizeSubmission('all_wrong')" class="w-full p-4 rounded-2xl border-2 border-rose-200 dark:border-rose-900/50 hover:bg-rose-50/50 dark:hover:bg-rose-950/20 text-right flex items-center justify-between transition-all">
+                    <div>
+                        <span class="font-extrabold text-sm sm:text-base text-rose-700 dark:text-rose-400 block">٣. أيوه عارف، احسبهم غلط</span>
+                        <span class="text-xs text-slate-500 dark:text-slate-400">اعتبر الأسئلة الفاضية غلط (صفر) واكشفلي كل الإجابات النموذجية</span>
+                    </div>
+                    <i class="ph-bold ph-x-circle text-xl text-rose-500 shrink-0"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 8: SPLIT QUESTION INTO SUB-QUESTIONS -->
+    <div id="subquestions-modal" class="fixed inset-0 z-50 hidden bg-slate-950/75 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-md w-full p-6 border border-slate-200 dark:border-slate-800 shadow-2xl space-y-4 animate-pop">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-10 h-10 rounded-xl bg-indigo-100 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300 flex items-center justify-center">
+                        <i class="ph-bold ph-git-fork text-2xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-extrabold text-base sm:text-lg">تفريع <span id="subq-target-label" class="text-indigo-700 dark:text-indigo-400">سؤال 1</span> لمطاليب</h3>
+                        <p class="text-xs text-slate-500 dark:text-slate-400">تقدر تفرّع أي سؤال أو حتى مطلوب فرعي لمطاليب أصغر</p>
+                    </div>
+                </div>
+                <button onclick="closeModal('subquestions-modal')" class="p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800">
+                    <i class="ph-bold ph-x text-lg"></i>
+                </button>
+            </div>
+
+            <form onsubmit="applySubQuestionsSplit(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-extrabold mb-1.5 text-slate-700 dark:text-slate-300">السؤال ده جواه كام مطلوب (نقطة)؟ *</label>
+                    <input type="number" id="subq-count-input" min="2" max="50" value="2" required class="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-base font-black focus:outline-none focus:border-indigo-700">
+                    <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-1.5">
+                        مثال: لو كتبت <strong>10</strong> عند سؤال <strong>14</strong>، هيتحول لـ <strong>14 (1)</strong> لحد <strong>14 (10)</strong>، وسؤال <strong>15</strong> هيفضل رقمه 15 زي الكتاب!
+                    </p>
+                </div>
+
+                <div class="flex items-center justify-end gap-2 pt-2">
+                    <button type="button" onclick="closeModal('subquestions-modal')" class="px-4 py-2.5 rounded-xl text-xs font-bold bg-slate-100 dark:bg-slate-800">إلغاء</button>
+                    <button type="submit" class="px-6 py-2.5 rounded-xl text-xs font-extrabold bg-indigo-700 hover:bg-indigo-600 text-white shadow-md flex items-center gap-1.5">
+                        <i class="ph-bold ph-check"></i>
+                        <span>تأكيد التفريع</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL 4: UNSAVED CHANGES GUARD MODAL -->
+    <div id="unsaved-modal" class="fixed inset-0 z-50 hidden bg-slate-950/75 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-md w-full p-6 border border-slate-200 dark:border-slate-800 shadow-2xl space-y-4">
+            <h3 class="font-black text-lg text-amber-600 flex items-center gap-2">
+                <i class="ph-bold ph-warning-octagon text-2xl"></i>
+                استنى! إنت محفظتش تقدمك
+            </h3>
+            <p class="text-sm text-slate-600 dark:text-slate-300">
+                لو خرجت دلوقتي من غير ما تدوس Save، التعديلات الأخيرة اللي عملتها هتروح. تحب تحفظ الأول؟
+            </p>
+            <div class="flex flex-wrap items-center justify-end gap-2 pt-2">
+                <button onclick="confirmDiscardAndExit()" class="px-4 py-2.5 rounded-xl text-xs font-bold text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/30">اخرج بدون حفظ</button>
+                <button onclick="closeModal('unsaved-modal')" class="px-4 py-2.5 rounded-xl text-xs font-bold bg-slate-100 dark:bg-slate-800">خليك في الجلسة</button>
+                <button onclick="saveAndExitSolve()" class="px-5 py-2.5 rounded-xl text-xs font-extrabold bg-emerald-600 text-white">احفظ واخرج</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SHARED MODALS (BACKUP, LIGHTBOX, PROFILE, TUTORIAL) -->
+    <div id="backup-modal" class="fixed inset-0 z-50 hidden bg-slate-950/75 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-lg w-full p-6 border border-slate-200 dark:border-slate-800 shadow-2xl space-y-5">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+                <h3 class="font-extrabold text-lg flex items-center gap-2">
+                    <i class="ph-bold ph-database text-emerald-600 text-2xl"></i>
+                    النسخ الاحتياطي ونقل البيانات
+                </h3>
+                <button onclick="closeModal('backup-modal')" class="p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800">
+                    <i class="ph-bold ph-x text-lg"></i>
+                </button>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <button onclick="exportFullBackup()" class="p-4 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm flex flex-col items-center justify-center gap-2 shadow-md transition-all">
+                    <i class="ph-bold ph-download-simple text-2xl"></i>
+                    <span>تصدير نسخة كاملة (.json)</span>
+                </button>
+                <label class="cursor-pointer p-4 rounded-2xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 font-bold text-sm flex flex-col items-center justify-center gap-2 border border-slate-300 dark:border-slate-700 transition-all">
+                    <input type="file" accept=".json,application/json" class="hidden" onchange="importFullBackup(event)">
+                    <i class="ph-bold ph-upload-simple text-2xl text-blue-800 dark:text-blue-400"></i>
+                    <span>استيراد نسخة احتياطية</span>
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <div id="image-lightbox-modal" onclick="closeModal('image-lightbox-modal')" class="fixed inset-0 z-50 hidden bg-slate-950/90 backdrop-blur-sm flex items-center justify-center p-4 cursor-zoom-out">
+        <div class="relative max-w-4xl max-h-[90vh]">
+            <button onclick="closeModal('image-lightbox-modal')" class="absolute -top-10 left-0 text-white hover:text-rose-400 flex items-center gap-1 text-sm font-bold">
+                <i class="ph-bold ph-x text-xl"></i> إغلاق
+            </button>
+            <img id="lightbox-img-el" src="" alt="معاينة الصورة" class="max-w-full max-h-[85vh] rounded-2xl shadow-2xl object-contain bg-white">
+        </div>
+    </div>
+
+    <div id="profile-settings-modal" class="fixed inset-0 z-50 hidden bg-slate-950/75 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-md w-full p-6 border border-slate-200 dark:border-slate-800 shadow-2xl space-y-5">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+                <h3 class="font-extrabold text-lg flex items-center gap-2">
+                    <i class="ph-bold ph-user-circle text-blue-900 dark:text-blue-400 text-2xl"></i>
+                    ملفي الشخصي والثيمات
+                </h3>
+                <button onclick="closeModal('profile-settings-modal')" class="p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800">
+                    <i class="ph-bold ph-x text-lg"></i>
+                </button>
+            </div>
+            <form onsubmit="updateExistingUserProfile(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold mb-1 text-slate-600 dark:text-slate-400">الاسم</label>
+                    <input type="text" id="edit-user-name" required class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-sm font-bold">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold mb-1 text-slate-600 dark:text-slate-400">النوع</label>
+                    <div class="grid grid-cols-2 gap-2.5">
+                        <label class="cursor-pointer">
+                            <input type="radio" name="edit-gender" value="male" class="peer hidden">
+                            <div class="p-2.5 rounded-xl border-2 border-slate-200 dark:border-slate-700 peer-checked:border-blue-800 peer-checked:bg-blue-50 dark:peer-checked:bg-blue-950/50 text-center font-bold text-xs">ذكر 👦</div>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="radio" name="edit-gender" value="female" class="peer hidden">
+                            <div class="p-2.5 rounded-xl border-2 border-slate-200 dark:border-slate-700 peer-checked:border-pink-600 peer-checked:bg-pink-50 dark:peer-checked:bg-pink-950/50 text-center font-bold text-xs">أنثى 👧</div>
+                        </label>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold mb-2 text-slate-600 dark:text-slate-400">لون الموقع</label>
+                    <div class="grid grid-cols-5 gap-2">
+                        <button type="button" onclick="applyColorTheme('blue', true)" data-edit-tval="blue" class="edit-theme-btn p-2 rounded-xl border-2 border-slate-200 dark:border-slate-700 flex flex-col items-center gap-1">
+                            <span class="w-6 h-6 rounded-full bg-[#1e3a8a]"></span>
+                            <span class="text-[11px] font-bold">أزرق</span>
+                        </button>
+                        <button type="button" onclick="applyColorTheme('pink', true)" data-edit-tval="pink" class="edit-theme-btn p-2 rounded-xl border-2 border-slate-200 dark:border-slate-700 flex flex-col items-center gap-1">
+                            <span class="w-6 h-6 rounded-full bg-[#db2777]"></span>
+                            <span class="text-[11px] font-bold">بينك</span>
+                        </button>
+                        <button type="button" onclick="applyColorTheme('green', true)" data-edit-tval="green" class="edit-theme-btn p-2 rounded-xl border-2 border-slate-200 dark:border-slate-700 flex flex-col items-center gap-1">
+                            <span class="w-6 h-6 rounded-full bg-[#059669]"></span>
+                            <span class="text-[11px] font-bold">أخضر</span>
+                        </button>
+                        <button type="button" onclick="applyColorTheme('red', true)" data-edit-tval="red" class="edit-theme-btn p-2 rounded-xl border-2 border-slate-200 dark:border-slate-700 flex flex-col items-center gap-1">
+                            <span class="w-6 h-6 rounded-full bg-[#dc2626]"></span>
+                            <span class="text-[11px] font-bold">أحمر</span>
+                        </button>
+                        <button type="button" onclick="applyColorTheme('purple', true)" data-edit-tval="purple" class="edit-theme-btn p-2 rounded-xl border-2 border-slate-200 dark:border-slate-700 flex flex-col items-center gap-1">
+                            <span class="w-6 h-6 rounded-full bg-[#7c3aed]"></span>
+                            <span class="text-[11px] font-bold">بنفسجي</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="pt-2 flex items-center justify-between gap-2">
+                    <button type="button" onclick="exportFullBackup()" class="px-3.5 py-2.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 text-xs font-extrabold flex items-center gap-1.5">
+                        <i class="ph-bold ph-download-simple text-base"></i>
+                        <span>تحميل ملفي الاحتياطي</span>
+                    </button>
+                    <button type="submit" class="px-5 py-2.5 rounded-xl bg-blue-900 hover:bg-blue-800 text-white text-xs font-extrabold">حفظ التعديلات</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="onboarding-modal" class="fixed inset-0 z-50 hidden bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-3 sm:p-5">
+        <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-2xl w-full p-5 sm:p-7 border border-slate-200 dark:border-slate-800 shadow-2xl relative overflow-hidden flex flex-col max-h-[92vh]">
+            <button onclick="dismissTutorialForever()" class="absolute top-4 left-4 z-10 w-9 h-9 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-rose-100 hover:text-rose-600 text-slate-500 flex items-center justify-center">
+                <i class="ph-bold ph-x text-lg"></i>
+            </button>
+            <div id="tut-step-0" class="text-center py-6 space-y-4">
+                <h2 class="text-2xl font-black">دليل البابل شيت الذكي</h2>
+                <p class="text-sm text-slate-500">استخدم الكيبورد (1-4 أو أ-د) للحل السريع، والأسهم للتنقل بين الأسئلة.</p>
+                <button onclick="dismissTutorialForever()" class="px-6 py-3 rounded-xl bg-blue-900 text-white font-bold">فهمت</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="user-init-modal" class="fixed inset-0 z-[60] hidden bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-5"></div>
+
+    <!-- TOAST NOTIFICATION CONTAINER -->
+    <div id="toast-container" class="fixed bottom-5 left-5 right-5 sm:left-auto sm:right-6 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>
