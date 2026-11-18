@@ -1,5 +1,5 @@
 /* ========================================================================= */
-/* SMART BUBBLE SHEET (البابل شيت الذكي) - UNIFIED ENGINE v2.0               */
+/* SMART BUBBLE SHEET (البابل شيت الذكي) - CLEAN MASTER ENGINE v2.5           */
 /* ========================================================================= */
 
 const STORAGE_KEYS = {
@@ -29,7 +29,7 @@ const CATEGORY_META = {
         label: 'اختبار',
         plural: 'اختبارات',
         icon: 'ph-exam',
-        badgeClass: 'bg-amber-100 text-amber-900 dark:bg-amber-900/50 dark:text-amber-300'
+        badgeClass: 'bg-amber-100 text-amber-900 dark:bg-amber-950/50 dark:text-amber-300'
     }
 };
 
@@ -59,7 +59,7 @@ let appState = {
 };
 
 /* ========================================================================= */
-/* INITIALIZATION & NAVIGATION                                               */
+/* INITIALIZATION & ROUTING                                                  */
 /* ========================================================================= */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -110,7 +110,6 @@ function navigateTo(pageName, params = {}) {
 
 function loadStateFromStorage() {
     try {
-        // Migrate v1 data seamlessly if v2 is empty
         const hwRaw = localStorage.getItem(STORAGE_KEYS.HOMEWORKS) || localStorage.getItem('sbs_homeworks_v1');
         const misRaw = localStorage.getItem(STORAGE_KEYS.MISTAKES) || localStorage.getItem('sbs_mistakes_v1');
         const setRaw = localStorage.getItem(STORAGE_KEYS.SETTINGS) || localStorage.getItem('sbs_settings_v1');
@@ -146,7 +145,7 @@ function saveStateToStorage() {
 }
 
 /* ========================================================================= */
-/* SAFE HTML SANITIZER & KATEX MATH RENDERER                                 */
+/* SANITIZER & KATEX RENDERING                                               */
 /* ========================================================================= */
 
 function sanitizeRichHtml(dirtyHtml) {
@@ -168,7 +167,6 @@ function sanitizeRichHtml(dirtyHtml) {
                     child.remove();
                     return;
                 }
-                // Strip event handlers & javascript: URLs
                 Array.from(child.attributes).forEach(attr => {
                     const name = attr.name.toLowerCase();
                     const val = attr.value.toLowerCase().trim();
@@ -199,13 +197,13 @@ function renderMathInContainer(element) {
                 throwOnError: false
             });
         } catch (e) {
-            // Silently ignore malformed LaTeX
+            // Ignore malformed latex
         }
     }
 }
 
 /* ========================================================================= */
-/* THEME, PROFILE & GLOBAL HEADER                                            */
+/* THEME & PROFILE MANAGEMENT                                                */
 /* ========================================================================= */
 
 function applyThemeSettings() {
@@ -276,7 +274,7 @@ function generateAppleTouchIcon() {
 }
 
 /* ========================================================================= */
-/* PROFILE & ONBOARDING MODALS                                               */
+/* MODALS & ONBOARDING                                                       */
 /* ========================================================================= */
 
 function showUserInitStep(step) {
@@ -367,16 +365,8 @@ function dismissTutorialForever() {
     closeModal('onboarding-modal');
 }
 
-function replayTutorialAnimation(step) {
-    const stage = document.getElementById(`tut-anim-stage-${step}`);
-    if (!stage) return;
-    const html = stage.innerHTML;
-    stage.innerHTML = '';
-    setTimeout(() => { stage.innerHTML = html; }, 30);
-}
-
 /* ========================================================================= */
-/* HOME PAGE LOGIC (AI JSON + STUDENT METADATA + MANUAL SETUP)               */
+/* HOME PAGE LOGIC                                                           */
 /* ========================================================================= */
 
 function initHomePage() {
@@ -462,7 +452,7 @@ function startSessionFromUploadedJson(e) {
 
     const newHw = {
         id: 'hw_' + Date.now(),
-        category, // 'homework' | 'practice' | 'exam'
+        category,
         subject,
         book,
         chapter,
@@ -471,7 +461,7 @@ function startSessionFromUploadedJson(e) {
         manualPhase: null,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
-        status: 'in_progress', // 'in_progress' | 'partial' | 'completed'
+        status: 'in_progress',
         questions: normalizedQuestions
     };
 
@@ -522,7 +512,7 @@ function createManualHomework(e) {
         chapter,
         lesson,
         mode: 'manual',
-        manualPhase: 'student_solving', // 'student_solving' -> 'key_entry'
+        manualPhase: 'student_solving',
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
         status: 'in_progress',
@@ -632,7 +622,7 @@ function deleteHomework(hwId) {
 }
 
 /* ========================================================================= */
-/* SOLVE PAGE LOGIC (BUBBLE SHEET, SUB-QUESTIONS, TWO-PHASE MANUAL, KATEX)   */
+/* SOLVE PAGE LOGIC                                                          */
 /* ========================================================================= */
 
 function getActiveHomework() {
@@ -656,7 +646,6 @@ function initSolvePage() {
     document.getElementById('solve-subject-badge').textContent = hw.subject;
     document.getElementById('solve-title').textContent = `${hw.book} • ${hw.chapter} • ${hw.lesson}`;
 
-    // Find first unanswered question if resuming
     const firstUnanswered = hw.questions.findIndex(q => q.type === 'essay' ? q.essay_score === null : !q.user_answer);
     appState.currentQuestionIndex = firstUnanswered >= 0 ? firstUnanswered : 0;
 
@@ -720,11 +709,11 @@ function setSolveMode(mode) {
     const stdBtn = document.getElementById('mode-standard-btn');
     const autoBtn = document.getElementById('mode-auto-btn');
     if (mode === 'standard') {
-        stdBtn.className = 'px-3 py-1.5 rounded-lg text-xs font-bold transition-all bg-white dark:bg-slate-700 text-blue-900 dark:text-white shadow-sm';
-        autoBtn.className = 'px-3 py-1.5 rounded-lg text-xs font-bold transition-all text-slate-600 dark:text-slate-400 flex items-center gap-1';
+        if (stdBtn) stdBtn.className = 'px-3 py-1.5 rounded-lg text-xs font-bold transition-all bg-white dark:bg-slate-700 text-blue-900 dark:text-white shadow-sm';
+        if (autoBtn) autoBtn.className = 'px-3 py-1.5 rounded-lg text-xs font-bold transition-all text-slate-600 dark:text-slate-400 flex items-center gap-1';
     } else {
-        autoBtn.className = 'px-3 py-1.5 rounded-lg text-xs font-bold transition-all bg-white dark:bg-slate-700 text-blue-900 dark:text-white shadow-sm flex items-center gap-1';
-        stdBtn.className = 'px-3 py-1.5 rounded-lg text-xs font-bold transition-all text-slate-600 dark:text-slate-400';
+        if (autoBtn) autoBtn.className = 'px-3 py-1.5 rounded-lg text-xs font-bold transition-all bg-white dark:bg-slate-700 text-blue-900 dark:text-white shadow-sm flex items-center gap-1';
+        if (stdBtn) stdBtn.className = 'px-3 py-1.5 rounded-lg text-xs font-bold transition-all text-slate-600 dark:text-slate-400';
     }
 }
 
@@ -736,28 +725,30 @@ function renderActiveQuestion() {
     const q = hw.questions[idx];
     if (!q) return;
 
-    document.getElementById('q-number-display').textContent = `سؤال ${q.number}`;
-    document.getElementById('q-total-display').textContent = `(${idx + 1} من ${hw.questions.length})`;
-    document.getElementById('q-type-badge').textContent = q.type === 'essay' ? 'سؤال مقالي' : 'اختيار من متعدد';
+    const numDisp = document.getElementById('q-number-display');
+    const totDisp = document.getElementById('q-total-display');
+    const typeBadge = document.getElementById('q-type-badge');
+    if (numDisp) numDisp.textContent = `سؤال ${q.number}`;
+    if (totDisp) totDisp.textContent = `(${idx + 1} من ${hw.questions.length})`;
+    if (typeBadge) typeBadge.textContent = q.type === 'essay' ? 'سؤال مقالي' : 'اختيار من متعدد';
 
-    // Show/hide unsplit button if this is a sub-question
     const unsplitBtn = document.getElementById('unsplit-subq-btn');
     if (unsplitBtn) {
         unsplitBtn.classList.toggle('hidden', !q.parentGroupId);
     }
 
-    // Flag button styling
     const flagBtn = document.getElementById('flag-q-btn');
     const flagIcon = document.getElementById('flag-icon');
-    if (q.flagged) {
-        flagBtn.className = 'px-3.5 py-2 rounded-xl text-xs font-extrabold border border-amber-400 bg-amber-100 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 transition-all flex items-center gap-1.5';
-        flagIcon.className = 'ph-fill ph-flag text-base text-amber-600';
-    } else {
-        flagBtn.className = 'px-3.5 py-2 rounded-xl text-xs font-bold border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-amber-50 dark:hover:bg-amber-950/30 transition-all flex items-center gap-1.5';
-        flagIcon.className = 'ph-bold ph-flag text-base';
+    if (flagBtn && flagIcon) {
+        if (q.flagged) {
+            flagBtn.className = 'px-3.5 py-2 rounded-xl text-xs font-extrabold border border-amber-400 bg-amber-100 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 transition-all flex items-center gap-1.5';
+            flagIcon.className = 'ph-fill ph-flag text-base text-amber-600';
+        } else {
+            flagBtn.className = 'px-3.5 py-2 rounded-xl text-xs font-bold border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-amber-50 dark:hover:bg-amber-950/30 transition-all flex items-center gap-1.5';
+            flagIcon.className = 'ph-bold ph-flag text-base';
+        }
     }
 
-    // Question Content (Text, Rich HTML Table/SVG, Image)
     const attachBox = document.getElementById('retry-attachment-box');
     const textEl = document.getElementById('retry-q-text');
     const htmlEl = document.getElementById('retry-q-html');
@@ -768,57 +759,64 @@ function renderActiveQuestion() {
     const hasHtml = Boolean(q.question_html && q.question_html.trim());
     const hasImg = Boolean(q.question_image);
 
-    if (hasText || hasHtml || hasImg) {
-        attachBox.classList.remove('hidden');
-        if (hasText) {
-            textEl.classList.remove('hidden');
-            textEl.textContent = q.question_text;
-            renderMathInContainer(textEl);
+    if (attachBox) {
+        if (hasText || hasHtml || hasImg) {
+            attachBox.classList.remove('hidden');
+            if (textEl) {
+                if (hasText) {
+                    textEl.classList.remove('hidden');
+                    textEl.textContent = q.question_text;
+                    renderMathInContainer(textEl);
+                } else {
+                    textEl.classList.add('hidden');
+                }
+            }
+            if (htmlEl) {
+                if (hasHtml) {
+                    htmlEl.classList.remove('hidden');
+                    htmlEl.innerHTML = sanitizeRichHtml(q.question_html);
+                    renderMathInContainer(htmlEl);
+                } else {
+                    htmlEl.classList.add('hidden');
+                }
+            }
+            if (imgWrap && imgEl) {
+                if (hasImg) {
+                    imgWrap.classList.remove('hidden');
+                    imgEl.src = q.question_image;
+                } else {
+                    imgWrap.classList.add('hidden');
+                }
+            }
         } else {
-            textEl.classList.add('hidden');
+            attachBox.classList.add('hidden');
         }
-
-        if (hasHtml) {
-            htmlEl.classList.remove('hidden');
-            htmlEl.innerHTML = sanitizeRichHtml(q.question_html);
-            renderMathInContainer(htmlEl);
-        } else {
-            htmlEl.classList.add('hidden');
-        }
-
-        if (hasImg) {
-            imgWrap.classList.remove('hidden');
-            imgEl.src = q.question_image;
-        } else {
-            imgWrap.classList.add('hidden');
-        }
-    } else {
-        attachBox.classList.add('hidden');
     }
 
-    // MCQ vs Essay
     const mcqContainer = document.getElementById('mcq-container');
     const essayContainer = document.getElementById('essay-container');
 
     if (q.type === 'essay') {
-        mcqContainer.classList.add('hidden');
-        essayContainer.classList.remove('hidden');
+        if (mcqContainer) mcqContainer.classList.add('hidden');
+        if (essayContainer) essayContainer.classList.remove('hidden');
 
         const modelTextEl = document.getElementById('essay-model-text');
         const overlayEl = document.getElementById('essay-reveal-overlay');
         const gradingBox = document.getElementById('essay-grading-box');
 
-        modelTextEl.textContent = q.model_answer || 'لا يوجد نص للإجابة النموذجية.';
-        renderMathInContainer(modelTextEl);
+        if (modelTextEl) {
+            modelTextEl.textContent = q.model_answer || 'لا يوجد نص للإجابة النموذجية.';
+            renderMathInContainer(modelTextEl);
+        }
 
         if (q.essay_score !== null) {
-            modelTextEl.classList.remove('essay-blur');
-            overlayEl.classList.add('hidden');
-            gradingBox.classList.remove('hidden');
+            if (modelTextEl) modelTextEl.classList.remove('essay-blur');
+            if (overlayEl) overlayEl.classList.add('hidden');
+            if (gradingBox) gradingBox.classList.remove('hidden');
         } else {
-            modelTextEl.classList.add('essay-blur');
-            overlayEl.classList.remove('hidden');
-            gradingBox.classList.add('hidden');
+            if (modelTextEl) modelTextEl.classList.add('essay-blur');
+            if (overlayEl) overlayEl.classList.remove('hidden');
+            if (gradingBox) gradingBox.classList.add('hidden');
         }
 
         document.querySelectorAll('.essay-score-btn').forEach(btn => {
@@ -829,42 +827,45 @@ function renderActiveQuestion() {
             btn.classList.toggle('border-blue-900', active);
         });
     } else {
-        essayContainer.classList.add('hidden');
-        mcqContainer.classList.remove('hidden');
+        if (essayContainer) essayContainer.classList.add('hidden');
+        if (mcqContainer) mcqContainer.classList.remove('hidden');
 
         const grid = document.getElementById('mcq-options-grid');
-        const isKeyPhase = hw.mode === 'manual' && hw.manualPhase === 'key_entry';
-        const selectedVal = isKeyPhase ? q.correct_answer : q.user_answer;
+        if (grid) {
+            const isKeyPhase = hw.mode === 'manual' && hw.manualPhase === 'key_entry';
+            const selectedVal = isKeyPhase ? q.correct_answer : q.user_answer;
+            const entries = Object.entries(q.options || {});
 
-        const entries = Object.entries(q.options || {});
-        grid.innerHTML = entries.map(([key, val]) => {
-            const isSelected = selectedVal === key;
-            const showLabelText = val && val.trim() !== key.trim();
-            const activeClasses = isKeyPhase
-                ? 'border-emerald-600 bg-emerald-50 dark:bg-emerald-950/50 text-emerald-950 dark:text-emerald-100 ring-2 ring-emerald-500/40'
-                : 'border-blue-900 bg-blue-50 dark:bg-blue-950/50 text-blue-950 dark:text-blue-100 ring-2 ring-blue-600/30';
-            const badgeClasses = isSelected
-                ? (isKeyPhase ? 'bg-emerald-600 text-white' : 'bg-blue-900 text-white')
-                : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300';
+            grid.innerHTML = entries.map(([key, val]) => {
+                const isSelected = selectedVal === key;
+                const showLabelText = val && val.trim() !== key.trim();
+                const activeClasses = isKeyPhase
+                    ? 'border-emerald-600 bg-emerald-50 dark:bg-emerald-950/50 text-emerald-950 dark:text-emerald-100 ring-2 ring-emerald-500/40'
+                    : 'border-blue-900 bg-blue-50 dark:bg-blue-950/50 text-blue-950 dark:text-blue-100 ring-2 ring-blue-600/30';
+                const badgeClasses = isSelected
+                    ? (isKeyPhase ? 'bg-emerald-600 text-white' : 'bg-blue-900 text-white')
+                    : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300';
 
-            return `
-                <button type="button" onclick="selectMcqOption('${escapeHtml(key)}')" class="p-4 rounded-2xl border-2 text-right flex items-center gap-3.5 transition-all animate-pop ${isSelected ? activeClasses : 'border-slate-200 dark:border-slate-800 hover:border-blue-800 dark:hover:border-blue-600 bg-white dark:bg-slate-900'}">
-                    <span class="w-11 h-11 rounded-xl font-black text-lg flex items-center justify-center shrink-0 transition-colors ${badgeClasses}">
-                        ${escapeHtml(key)}
-                    </span>
-                    <span class="rich-question-content font-bold text-sm sm:text-base leading-snug flex-1">
-                        ${showLabelText ? escapeHtml(val) : `الاختيار (${escapeHtml(key)})`}
-                    </span>
-                </button>
-            `;
-        }).join('');
+                return `
+                    <button type="button" onclick="selectMcqOption('${escapeHtml(key)}')" class="p-4 rounded-2xl border-2 text-right flex items-center gap-3.5 transition-all animate-pop ${isSelected ? activeClasses : 'border-slate-200 dark:border-slate-800 hover:border-blue-800 dark:hover:border-blue-600 bg-white dark:bg-slate-900'}">
+                        <span class="w-11 h-11 rounded-xl font-black text-lg flex items-center justify-center shrink-0 transition-colors ${badgeClasses}">
+                            ${escapeHtml(key)}
+                        </span>
+                        <span class="rich-question-content font-bold text-sm sm:text-base leading-snug flex-1">
+                            ${showLabelText ? escapeHtml(val) : `الاختيار (${escapeHtml(key)})`}
+                        </span>
+                    </button>
+                `;
+            }).join('');
 
-        renderMathInContainer(grid);
+            renderMathInContainer(grid);
+        }
     }
 
-    // Prev / Next buttons state
-    document.getElementById('prev-q-btn').disabled = idx === 0;
-    document.getElementById('next-q-btn').disabled = idx === hw.questions.length - 1;
+    const prevBtn = document.getElementById('prev-q-btn');
+    const nextBtn = document.getElementById('next-q-btn');
+    if (prevBtn) prevBtn.disabled = idx === 0;
+    if (nextBtn) nextBtn.disabled = idx === hw.questions.length - 1;
 
     updateSolveProgressHeader();
 }
@@ -894,9 +895,12 @@ function selectMcqOption(optionKey) {
 }
 
 function revealEssayAnswer() {
-    document.getElementById('essay-model-text').classList.remove('essay-blur');
-    document.getElementById('essay-reveal-overlay').classList.add('hidden');
-    document.getElementById('essay-grading-box').classList.remove('hidden');
+    const modelText = document.getElementById('essay-model-text');
+    const overlay = document.getElementById('essay-reveal-overlay');
+    const gradingBox = document.getElementById('essay-grading-box');
+    if (modelText) modelText.classList.remove('essay-blur');
+    if (overlay) overlay.classList.add('hidden');
+    if (gradingBox) gradingBox.classList.remove('hidden');
 }
 
 function gradeEssay(score) {
@@ -1042,15 +1046,17 @@ function saveAndExitSolve() {
 }
 
 /* ========================================================================= */
-/* SUB-QUESTIONS SPLITTING ("فرّع السؤال لمطاليب")                           */
+/* SUB-QUESTIONS SPLITTING                                                   */
 /* ========================================================================= */
 
 function openSubQuestionsModal() {
     const hw = getActiveHomework();
     if (!hw) return;
     const q = hw.questions[appState.currentQuestionIndex];
-    document.getElementById('subq-target-label').textContent = `سؤال ${q.number}`;
-    document.getElementById('subq-count-input').value = 2;
+    const targetLabel = document.getElementById('subq-target-label');
+    const countInput = document.getElementById('subq-count-input');
+    if (targetLabel) targetLabel.textContent = `سؤال ${q.number}`;
+    if (countInput) countInput.value = 2;
     openModal('subquestions-modal');
 }
 
@@ -1058,7 +1064,8 @@ function applySubQuestionsSplit(e) {
     e.preventDefault();
     const hw = getActiveHomework();
     if (!hw) return;
-    const count = Math.min(50, Math.max(2, parseInt(document.getElementById('subq-count-input').value, 10) || 2));
+    const countInput = document.getElementById('subq-count-input');
+    const count = Math.min(50, Math.max(2, parseInt(countInput?.value, 10) || 2));
     const idx = appState.currentQuestionIndex;
     const orig = hw.questions[idx];
     const groupId = 'grp_' + Date.now();
@@ -1130,14 +1137,13 @@ function bindSolveKeyboardShortcuts() {
 }
 
 /* ========================================================================= */
-/* SUBMISSION & GRADING ENGINE                                               */
+/* SUBMISSION & GRADING                                                      */
 /* ========================================================================= */
 
 function initiateSubmitHomework() {
     const hw = getActiveHomework();
     if (!hw) return;
 
-    // If manual mode and still in phase 1, switch to phase 2 first!
     if (hw.mode === 'manual' && hw.manualPhase === 'student_solving') {
         handleManualPhaseAction();
         showToast('دلوقتي دخل الإجابات الصح من آخر الكتاب عشان نصححلك!', 'info');
@@ -1149,8 +1155,10 @@ function initiateSubmitHomework() {
     ).length;
 
     if (unansweredCount > 0) {
-        document.getElementById('unanswered-modal-count').textContent = unansweredCount;
-        document.getElementById('total-modal-count').textContent = hw.questions.length;
+        const unansModalCount = document.getElementById('unanswered-modal-count');
+        const totModalCount = document.getElementById('total-modal-count');
+        if (unansModalCount) unansModalCount.textContent = unansweredCount;
+        if (totModalCount) totModalCount.textContent = hw.questions.length;
         openModal('partial-submit-modal');
     } else {
         finalizeSubmission('full');
@@ -1243,8 +1251,10 @@ function initResultsPage() {
         resCatBadge.className = `px-3 py-1 rounded-full text-xs font-extrabold ${cat.badgeClass}`;
     }
 
-    document.getElementById('res-subject-badge').textContent = hw.subject;
-    document.getElementById('res-meta-title').textContent = `${hw.book} • ${hw.chapter} • ${hw.lesson}`;
+    const subBadge = document.getElementById('res-subject-badge');
+    const metaTitle = document.getElementById('res-meta-title');
+    if (subBadge) subBadge.textContent = hw.subject;
+    if (metaTitle) metaTitle.textContent = `${hw.book} • ${hw.chapter} • ${hw.lesson}`;
 
     let correct = 0;
     let wrong = 0;
@@ -1267,24 +1277,35 @@ function initResultsPage() {
     const gradedTotal = correct + wrong;
     const pct = gradedTotal > 0 ? Math.round((correct / gradedTotal) * 100) : 0;
 
-    document.getElementById('res-percentage').textContent = `${pct}%`;
-    document.getElementById('res-score-fraction').textContent = `${correct} / ${gradedTotal}`;
-    document.getElementById('res-correct-count').textContent = correct;
-    document.getElementById('res-wrong-count').textContent = wrong;
-    document.getElementById('res-unanswered-count').textContent = unanswered;
+    const resPct = document.getElementById('res-percentage');
+    const resFrac = document.getElementById('res-score-fraction');
+    const resCorr = document.getElementById('res-correct-count');
+    const resWrng = document.getElementById('res-wrong-count');
+    const resUnans = document.getElementById('res-unanswered-count');
+
+    if (resPct) resPct.textContent = `${pct}%`;
+    if (resFrac) resFrac.textContent = `${correct} / ${gradedTotal}`;
+    if (resCorr) resCorr.textContent = correct;
+    if (resWrng) resWrng.textContent = wrong;
+    if (resUnans) resUnans.textContent = unanswered;
 
     const encEl = document.getElementById('res-encouragement');
-    if (pct >= 85) encEl.textContent = 'أداء أسطوري! مستواك ممتاز 🚀';
-    else if (pct >= 65) encEl.textContent = 'شغل حلو جداً! راجع غلطاتك وهتقفلها 💪';
-    else encEl.textContent = 'بداية كويسة! ركز في مراجعة الغلطات وهتتحسن بسرعة 🎯';
+    if (encEl) {
+        if (pct >= 85) encEl.textContent = 'أداء أسطوري! مستواك ممتاز 🚀';
+        else if (pct >= 65) encEl.textContent = 'شغل حلو جداً! راجع غلطاتك وهتقفلها 💪';
+        else encEl.textContent = 'بداية كويسة! ركز في مراجعة الغلطات وهتتحسن بسرعة 🎯';
+    }
 
     if (hw.status === 'partial' && unanswered > 0) {
-        document.getElementById('res-partial-note').classList.remove('hidden');
-        document.getElementById('res-continue-btn').classList.remove('hidden');
+        const partNote = document.getElementById('res-partial-note');
+        const contBtn = document.getElementById('res-continue-btn');
+        if (partNote) partNote.classList.remove('hidden');
+        if (contBtn) contBtn.classList.remove('hidden');
     }
 
     if (wrong > 0) {
-        document.getElementById('res-retry-mistakes-btn').classList.remove('hidden');
+        const retryBtn = document.getElementById('res-retry-mistakes-btn');
+        if (retryBtn) retryBtn.classList.remove('hidden');
     }
 
     renderResultsQuestionsList();
@@ -1407,7 +1428,7 @@ function retryMistakesFromCurrentSession() {
 }
 
 /* ========================================================================= */
-/* HOMEWORKS / FOLDERS PAGE LOGIC (WITH HOMEWORK / PRACTICE / EXAM FILTER)   */
+/* HOMEWORKS & FOLDERS PAGE LOGIC                                            */
 /* ========================================================================= */
 
 function initHomeworksPage() {
@@ -1443,7 +1464,8 @@ function renderFoldersPage() {
     const container = document.getElementById('folders-container');
     if (!container) return;
 
-    const search = (document.getElementById('folders-search-input')?.value || '').trim().toLowerCase();
+    const searchInput = document.getElementById('folders-search-input');
+    const search = (searchInput?.value || '').trim().toLowerCase();
     const catFilter = appState.folderCategoryFilter;
 
     const filtered = appState.homeworks.filter(hw => {
@@ -1466,7 +1488,6 @@ function renderFoldersPage() {
         return;
     }
 
-    // Group by Subject
     const grouped = {};
     filtered.forEach(hw => {
         const subj = hw.subject || 'مادة عامة';
@@ -1500,13 +1521,17 @@ function renderFoldersPage() {
 
 function openSubjectIconModal(subject) {
     appState.selectedIconSubject = subject;
-    document.getElementById('icon-modal-subject-name').textContent = subject;
+    const nameEl = document.getElementById('icon-modal-subject-name');
+    if (nameEl) nameEl.textContent = subject;
+
     const grid = document.getElementById('subject-icons-grid');
-    grid.innerHTML = AVAILABLE_SUBJECT_ICONS.map(ic => `
-        <button type="button" onclick="selectSubjectIcon('${ic}')" class="p-3 rounded-2xl border border-slate-200 dark:border-slate-700 hover:border-blue-800 hover:bg-blue-50 dark:hover:bg-blue-950/50 flex items-center justify-center text-2xl text-blue-900 dark:text-blue-400">
-            <i class="ph-fill ${ic}"></i>
-        </button>
-    `).join('');
+    if (grid) {
+        grid.innerHTML = AVAILABLE_SUBJECT_ICONS.map(ic => `
+            <button type="button" onclick="selectSubjectIcon('${ic}')" class="p-3 rounded-2xl border border-slate-200 dark:border-slate-700 hover:border-blue-800 hover:bg-blue-50 dark:hover:bg-blue-950/50 flex items-center justify-center text-2xl text-blue-900 dark:text-blue-400">
+                <i class="ph-fill ${ic}"></i>
+            </button>
+        `).join('');
+    }
     openModal('subject-icon-modal');
 }
 
@@ -1718,7 +1743,7 @@ function openBackupModal() {
 
 function exportFullBackup() {
     const payload = {
-        version: '2.0',
+        version: '2.5',
         exportedAt: new Date().toISOString(),
         userProfile: appState.userProfile,
         settings: appState.settings,
@@ -1758,12 +1783,8 @@ function importFullBackup(e) {
     reader.readAsText(file);
 }
 
-function handleInitialBackupRestore(e) {
-    importFullBackup(e);
-}
-
 /* ========================================================================= */
-/* UI UTILITIES (MODALS, LIGHTBOX, TOASTS, ESCAPE)                           */
+/* UI UTILITIES & HELPERS                                                    */
 /* ========================================================================= */
 
 function openModal(id) {
