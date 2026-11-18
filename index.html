@@ -323,47 +323,61 @@
                 </button>
             </div>
 
-            <div class="overflow-y-auto custom-scroll flex-1 bg-slate-950 text-slate-100 p-4 rounded-2xl text-xs sm:text-sm font-mono leading-relaxed select-all" dir="ltr" id="ai-prompt-text">أنت مساعد تعليمي ذكي متخصص في رقمنة الأسئلة ونماذج الإجابة بدقة 100%.
-قم باستخراج جميع الأسئلة وإجاباتها من الصور أو الملف المرفق وحوّلها حصرياً إلى كود JSON صالح بدون أي نص إضافي خارج الكود.
+            <div class="overflow-y-auto custom-scroll flex-1 bg-slate-950 text-slate-100 p-4 rounded-2xl text-xs sm:text-sm font-mono leading-relaxed select-all" dir="ltr" id="ai-prompt-text">
+                Role & Objective:
+You are an expert OCR and Educational Data Engineer. Your task is to extract questions from the provided images/text and output a strictly valid JSON file containing structured questions for a smart interactive bubble sheet application.
 
-قواعد مهمة جداً:
-1. لا تطلب أو تضع بيانات المادة أو اسم الكتاب أو الدرس (الطالب سيكتبها بنفسه). ركّز فقط على الأسئلة والإجابات.
-2. إذا احتوى السؤال على جدول بيانات، اكتبه بصيغة HTML table نظيفة داخل حقل "question_text" أو "question_html".
-3. إذا احتوى السؤال على رسم بياني بسيط، دائرة كهربية، شكل هندسي، أو مخطط، ارسمه بكود SVG نظيف وواضح (مع أبعاد viewBox مناسبة) داخل حقل "question_html".
-4. للمعادلات الرياضية والكيميائية، استخدم صيغة LaTeX القياسية بين علامتي $...$ للمعادلة السطرية أو $$...$$ للمعادلة المستقلة.
-5. حافظ على ترقيم الأسئلة الأصلي في الكتاب في حقل "number" (نص أو رقم، مثل "1" أو "14 (1)").
+CRITICAL Output Rule:
+- Output ONLY valid JSON. No markdown code blocks wrapping it if possible, or just standard ```json ... ``` with zero introductory or concluding conversational text.
+- To maximize output token limits and prevent truncation when handling 200+ questions, keep explanations and question text concise where appropriate, BUT DO NOT SUMMARIZE OR TRUNCATE READING PASSAGES (القطع والنصوص القرائية). Always extract and output reading passages completely and word-for-word without any omission.
 
-الهيكل المطلوب بالضبط:
+Handling Special Content & Elements:
+1. Quranic Text (القرآن الكريم): If the question contains Quranic verses, wrap them in standard Uthmanic/Hafs text standards using Unicode or standard Arabic Quran text, and explicitly embed standard Quranic HTML/Unicode entities if needed to preserve diacritics (تشكيل).
+2. Chemical Formulas & Mathematics: 
+   - To prevent RTL/LTR layout mixing (especially in chemical formulas like H2SO4 or math variables), wrap English terms, numbers, chemical formulas, and variables inside explicit HTML tags with direction attributes, e.g., <span dir="ltr">H2SO4</span> or use LaTeX delimiters ($...$ or $$...$$). Never let raw Arabic and English characters mix directly without a directional boundary or space.
+3. Tables (الجداول): Convert any table found in the source into a clean, compact HTML table format (`<table>...</table>`) inside the `question_html` field.
+4. Images / Diagrams / Graphs (الرسومات والرسوم البيانية): If a question relies on an image, graph, or diagram, provide a clear text description of what's in the diagram inside `question_text`, or reconstruct the graphical data into a clean HTML structure/table so the student can answer without needing the original image.
+5. Reading Passages / Comprehension (القطع والنصوص الطويلة): Extract the full passage completely and accurately in its original form without shortening or summarizing it.
+
+JSON Schema Structure Required:
 {
+  "subject": "Subject Name in Arabic (e.g., كيمياء)",
+  "book": "Book/Source Name (e.g., كتاب مندليف)",
+  "chapter": "Chapter Name (e.g., الباب الأول)",
+  "lesson": "Lesson Name (e.g., الدرس الأول)",
   "questions": [
     {
       "number": "1",
       "type": "mcq",
-      "question_text": "نص السؤال هنا (ويمكن استخدام $LaTeX$ للمعادلات)",
-      "question_html": "اختياري: ضع هنا كود <table> أو <svg> إذا كان السؤال يحتوي على جدول أو رسم توضيحي، وإلا اتركه فارغاً",
+      "question_text": "Full passage (if applicable) followed by the question text. Use <span dir=\"ltr\">...</span> for English/Chemistry formulas.",
+      "question_html": "Optional compact HTML table or rich formatting if needed, else empty string",
       "options": {
-        "أ": "نص الاختيار الأول",
-        "ب": "نص الاختيار الثاني",
-        "ج": "نص الاختيار الثالث",
-        "د": "نص الاختيار الرابع"
+        "أ": "Option A text",
+        "ب": "Option B text",
+        "ج": "Option C text",
+        "د": "Option D text"
       },
-      "correct_answer": "ب",
-      "explanation": "شرح مختصر لسبب صحة الإجابة إن وجد"
+      "correct_answer": "أ",
+      "explanation": "Concise explanation."
     },
     {
       "number": "2",
       "type": "essay",
-      "question_text": "نص السؤال المقالي",
-      "question_html": "",
-      "model_answer": "الإجابة النموذجية الكاملة للسؤال المقالي",
-      "explanation": "توزيع الدرجات أو ملاحظات إضافية"
+      "question_text": "Full text of the question...",
+      "options": {},
+      "correct_answer": "",
+      "model_answer": "Model answer.",
+      "explanation": "Explanation."
     }
   ]
 }
 
-ملاحظات:
-- للأسئلة الاختيارية (mcq): يجب أن تكون "correct_answer" واحدة من المفاتيح الموجودة في "options" (مثل "أ" أو "ب" أو "ج" أو "د" أو "A" أو "B" أو "C" أو "D").
-- للأسئلة المقالية (essay): اجعل "type": "essay" وضع الإجابة النموذجية في "model_answer".</div>
+Strict Rules:
+- Ensure all keys are double-quoted.
+- Ensure no trailing commas.
+- Ensure chemical formulas (e.g., <span dir="ltr">Fe2O3</span>) and numbers do not flip or get scrambled by RTL text direction.
+- Process ALL questions present in the source material without skipping.
+      </div>
 
             <div class="flex items-center justify-end gap-2 pt-2">
                 <button onclick="closeModal('prompt-modal')" class="px-4 py-2.5 rounded-xl text-sm font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800">إغلاق</button>
