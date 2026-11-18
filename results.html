@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <title>نتيجة التصحيح | البابل شيت الذكي</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%25' stop-color='%231e3a8a'/%3E%3Cstop offset='100%25' stop-color='%233b82f6'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='16' fill='url(%23g)'/%3E%3Crect x='14' y='16' width='14' height='14' rx='4' fill='none' stroke='%23ffffff' stroke-width='3.5'/%3E%3Cpath d='M17.5 23l3 3 5.5-6' fill='none' stroke='%2334d399' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cline x1='34' y1='23' x2='50' y2='23' stroke='%23ffffff' stroke-width='3.5' stroke-linecap='round'/%3E%3Crect x='14' y='36' width='14' height='14' rx='4' fill='none' stroke='%23ffffff' stroke-width='3.5'/%3E%3Cpath d='M17.5 43l3 3 5.5-6' fill='none' stroke='%2334d399' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cline x1='34' y1='43' x2='50' y2='43' stroke='%23ffffff' stroke-width='3.5' stroke-linecap='round'/%3E%3C/svg%3E">
+    <link rel="apple-touch-icon" id="apple-touch-icon-link" href="">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="البابل شيت الذكي">
+    <meta name="application-name" content="البابل شيت الذكي">
+    <meta name="theme-color" id="meta-theme-color" content="#1e3a8a">
+
+    <!-- Google Fonts: Cairo & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Inter:wght@500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Lightweight KaTeX -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Cairo', 'sans-serif'],
+                        en: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <!-- Shared Styles -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="results" class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 min-h-screen flex flex-col">
+
+    <!-- TOP NAVIGATION HEADER -->
+    <header class="sticky top-0 z-40 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 shadow-sm">
+        <div class="max-w-7xl mx-auto px-3 sm:px-6 h-16 flex items-center justify-between gap-2">
+            <button onclick="navigateTo('home')" class="flex items-center gap-2.5 text-right group focus:outline-none">
+                <div class="w-10 h-10 rounded-xl bg-blue-900 dark:bg-blue-700 text-white flex items-center justify-center shadow-md group-hover:scale-105 transition-transform">
+                    <i class="ph-bold ph-check-square-offset text-2xl"></i>
+                </div>
+                <div>
+                    <h1 class="font-extrabold text-base sm:text-lg leading-tight text-slate-900 dark:text-white">البابل شيت الذكي</h1>
+                    <p class="text-[11px] text-slate-500 dark:text-slate-400 hidden sm:block">تصحيح فوري وتحليل ذكي لأخطائك</p>
+                </div>
+            </button>
+
+            <div class="flex items-center gap-1.5 sm:gap-2.5">
+                <button onclick="openProfileSettingsModal()" id="header-user-pill" class="px-2.5 sm:px-3 py-2 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-1.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-100 border border-slate-200 dark:border-slate-700 transition-colors" title="ملفي الشخصي والألوان">
+                    <i id="header-user-icon" class="ph-fill ph-user-circle text-lg text-blue-900 dark:text-blue-400"></i>
+                    <span id="header-user-name" class="max-w-[85px] sm:max-w-[120px] truncate">حسابي</span>
+                </button>
+
+                <button onclick="navigateTo('home')" id="nav-home-btn" class="px-3 py-2 rounded-xl text-sm font-bold flex items-center gap-1.5 transition-colors text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800">
+                    <i class="ph-bold ph-house text-lg"></i>
+                    <span class="hidden md:inline">الرئيسية</span>
+                </button>
+
+                <button onclick="navigateTo('library')" id="nav-library-btn" class="px-3 py-2 rounded-xl text-sm font-bold flex items-center gap-1.5 transition-colors text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800">
+                    <i class="ph-bold ph-books text-lg text-amber-600 dark:text-amber-400"></i>
+                    <span>المكتبة</span>
+                </button>
+
+                <button onclick="navigateTo('homeworks')" id="nav-homeworks-btn" class="px-3 py-2 rounded-xl text-sm font-bold flex items-center gap-1.5 transition-colors text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800">
+                    <i class="ph-bold ph-folders text-lg text-blue-900 dark:text-blue-400"></i>
+                    <span>سجل الحل</span>
+                </button>
+
+                <button onclick="navigateTo('mistakes')" id="nav-mistakes-btn" class="relative px-3 py-2 rounded-xl text-sm font-bold flex items-center gap-1.5 transition-colors text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800">
+                    <i class="ph-bold ph-warning-circle text-lg text-rose-500"></i>
+                    <span>أخطائي</span>
+                    <span id="mistakes-badge" class="bg-rose-500 text-white text-xs font-extrabold px-2 py-0.5 rounded-full min-w-[22px] text-center">0</span>
+                </button>
+
+                <button onclick="openBackupModal()" class="p-2.5 sm:px-3 sm:py-2 rounded-xl text-sm font-bold flex items-center gap-1.5 text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-700 transition-colors" title="النسخ الاحتياطي ونقل البيانات">
+                    <i class="ph-bold ph-cloud-arrow-up text-lg text-emerald-600 dark:text-emerald-400"></i>
+                    <span class="hidden lg:inline">نسخة احتياطية</span>
+                </button>
+
+                <button onclick="toggleTheme()" class="p-2.5 rounded-xl text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-700 transition-colors" title="تغيير المظهر (ليلي / نهاري)">
+                    <i id="theme-icon" class="ph-bold ph-moon text-lg"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT CONTAINER (RESULTS) -->
+    <main class="flex-1 max-w-5xl w-full mx-auto px-3 sm:px-6 py-5 sm:py-8">
+
+        <section id="view-results" class="space-y-6">
+            
+            <!-- Score Summary Card -->
+            <div class="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 border border-slate-200 dark:border-slate-800 shadow-sm text-center space-y-5 relative overflow-hidden">
+                <div class="flex flex-wrap items-center justify-center gap-2">
+                    <span id="res-category-badge" class="px-3 py-1 rounded-full text-xs font-extrabold bg-amber-100 text-amber-900 dark:bg-amber-900/50 dark:text-amber-300">واجب</span>
+                    <span id="res-subject-badge" class="px-3 py-1 rounded-full text-xs font-extrabold bg-blue-100 text-blue-900 dark:bg-blue-900/50 dark:text-blue-300">المادة</span>
+                    <span id="res-meta-title" class="text-xs sm:text-sm font-bold text-slate-500 dark:text-slate-400">اسم الكتاب • الوحدة • الدرس</span>
+                </div>
+
+                <!-- Circular Score Badge -->
+                <div class="flex flex-col items-center justify-center py-2">
+                    <div id="res-percentage-circle" class="w-32 h-32 sm:w-36 sm:h-36 rounded-full border-8 border-emerald-500 flex flex-col items-center justify-center shadow-inner bg-emerald-50/40 dark:bg-emerald-950/20">
+                        <span id="res-percentage" class="text-3xl sm:text-4xl font-black text-emerald-600 dark:text-emerald-400">0%</span>
+                        <span id="res-score-fraction" class="text-xs sm:text-sm font-extrabold text-slate-600 dark:text-slate-300 mt-0.5">0 / 0</span>
+                    </div>
+                    <h2 id="res-encouragement" class="text-xl sm:text-2xl font-black mt-4">أداء ممتاز! عاش يا بطل 🚀</h2>
+                    <p id="res-partial-note" class="hidden text-xs sm:text-sm text-amber-700 dark:text-amber-400 font-bold mt-1 bg-amber-50 dark:bg-amber-950/40 px-3.5 py-1.5 rounded-xl border border-amber-200 dark:border-amber-800">
+                        تم تصحيح الأسئلة التي قمت بحلها فقط (تسليم جزئي). باقي الأسئلة متاحة للاستكمال في أي وقت.
+                    </p>
+                </div>
+
+                <!-- Stats Mini Grid -->
+                <div class="grid grid-cols-3 gap-2.5 sm:gap-4 max-w-lg mx-auto">
+                    <div class="p-3 rounded-2xl bg-emerald-50/80 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-900/50">
+                        <span class="block text-xs font-bold text-emerald-700 dark:text-emerald-400">إجابات صحيحة</span>
+                        <span id="res-correct-count" class="text-xl sm:text-2xl font-black text-emerald-700 dark:text-emerald-300">0</span>
+                    </div>
+                    <div class="p-3 rounded-2xl bg-rose-50/80 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-900/50">
+                        <span class="block text-xs font-bold text-rose-700 dark:text-rose-400">أخطاء مسجلة</span>
+                        <span id="res-wrong-count" class="text-xl sm:text-2xl font-black text-rose-700 dark:text-rose-300">0</span>
+                    </div>
+                    <div class="p-3 rounded-2xl bg-slate-100 dark:bg-slate-800/70 border border-slate-200 dark:border-slate-700">
+                        <span class="block text-xs font-bold text-slate-500 dark:text-slate-400">غير محلول</span>
+                        <span id="res-unanswered-count" class="text-xl sm:text-2xl font-black text-slate-700 dark:text-slate-200">0</span>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex flex-wrap items-center justify-center gap-3 pt-2">
+                    <button id="res-continue-btn" onclick="continueCurrentHomework()" class="hidden px-5 py-3 rounded-2xl bg-blue-900 hover:bg-blue-800 text-white font-extrabold text-xs sm:text-sm shadow-md flex items-center gap-2 transition-all active:scale-95">
+                        <i class="ph-bold ph-play text-lg"></i>
+                        <span>استكمال باقي الأسئلة</span>
+                    </button>
+                    <button id="res-retry-mistakes-btn" onclick="retryMistakesFromCurrentSession()" class="hidden px-5 py-3 rounded-2xl bg-rose-600 hover:bg-rose-500 text-white font-extrabold text-xs sm:text-sm shadow-md flex items-center gap-2 transition-all active:scale-95">
+                        <i class="ph-bold ph-arrows-clockwise text-lg"></i>
+                        <span>اختبرني في غلطات الجلسة دي</span>
+                    </button>
+                    <button onclick="navigateTo('mistakes')" class="px-5 py-3 rounded-2xl bg-slate-900 hover:bg-slate-800 dark:bg-slate-800 dark:hover:bg-slate-700 text-white font-extrabold text-xs sm:text-sm flex items-center gap-2 transition-all">
+                        <i class="ph-bold ph-warning-circle text-lg text-rose-400"></i>
+                        <span>افتح بنك أخطائي</span>
+                    </button>
+                    <button onclick="navigateTo('homeworks')" class="px-5 py-3 rounded-2xl border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 font-bold text-xs sm:text-sm flex items-center gap-2">
+                        <i class="ph-bold ph-folders text-lg"></i>
+                        <span>سجل الحل</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Detailed Question-by-Question Review -->
+            <div class="space-y-4">
+                <div class="flex flex-wrap items-center justify-between gap-2">
+                    <h3 class="text-lg sm:text-xl font-extrabold flex items-center gap-2">
+                        <i class="ph-bold ph-list-checks text-blue-900 dark:text-blue-400"></i>
+                        مراجعة الأسئلة بالتفصيل
+                    </h3>
+                    <div class="flex items-center gap-1.5 bg-white dark:bg-slate-900 p-1 rounded-xl border border-slate-200 dark:border-slate-800">
+                        <button onclick="filterResultsList('all')" id="res-filter-all" class="px-3 py-1.5 rounded-lg text-xs font-extrabold bg-blue-900 text-white">الكل</button>
+                        <button onclick="filterResultsList('wrong')" id="res-filter-wrong" class="px-3 py-1.5 rounded-lg text-xs font-bold text-slate-600 dark:text-slate-300">الأخطاء فقط</button>
+                        <button onclick="filterResultsList('correct')" id="res-filter-correct" class="px-3 py-1.5 rounded-lg text-xs font-bold text-slate-600 dark:text-slate-300">الصحيحة</button>
+                    </div>
+                </div>
+
+                <div id="results-questions-list" class="space-y-3.5">
+                    <!-- Populated dynamically -->
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- SHARED MODALS -->
+    <div id="backup-modal" class="fixed inset-0 z-50 hidden bg-slate-950/75 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-lg w-full p-6 border border-slate-200 dark:border-slate-800 shadow-2xl space-y-5">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+                <h3 class="font-extrabold text-lg flex items-center gap-2">
+                    <i class="ph-bold ph-database text-emerald-600 text-2xl"></i>
+                    النسخ الاحتياطي ونقل البيانات
+                </h3>
+                <button onclick="closeModal('backup-modal')" class="p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800">
+                    <i class="ph-bold ph-x text-lg"></i>
+                </button>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <button onclick="exportFullBackup()" class="p-4 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm flex flex-col items-center justify-center gap-2 shadow-md transition-all">
+                    <i class="ph-bold ph-download-simple text-2xl"></i>
+                    <span>تصدير نسخة كاملة (.json)</span>
+                </button>
+                <label class="cursor-pointer p-4 rounded-2xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 font-bold text-sm flex flex-col items-center justify-center gap-2 border border-slate-300 dark:border-slate-700 transition-all">
+                    <input type="file" accept=".json,application/json" class="hidden" onchange="importFullBackup(event)">
+                    <i class="ph-bold ph-upload-simple text-2xl text-blue-800 dark:text-blue-400"></i>
+                    <span>استيراد نسخة احتياطية</span>
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <div id="image-lightbox-modal" onclick="closeModal('image-lightbox-modal')" class="fixed inset-0 z-50 hidden bg-slate-950/90 backdrop-blur-sm flex items-center justify-center p-4 cursor-zoom-out">
+        <div class="relative max-w-4xl max-h-[90vh]">
+            <button onclick="closeModal('image-lightbox-modal')" class="absolute -top-10 left-0 text-white hover:text-rose-400 flex items-center gap-1 text-sm font-bold">
+                <i class="ph-bold ph-x text-xl"></i> إغلاق
+            </button>
+            <img id="lightbox-img-el" src="" alt="معاينة الصورة" class="max-w-full max-h-[85vh] rounded-2xl shadow-2xl object-contain bg-white">
+        </div>
+    </div>
+
+    <div id="profile-settings-modal" class="fixed inset-0 z-50 hidden bg-slate-950/75 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-md w-full p-6 border border-slate-200 dark:border-slate-800 shadow-2xl space-y-5">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+                <h3 class="font-extrabold text-lg flex items-center gap-2">
+                    <i class="ph-bold ph-user-circle text-blue-900 dark:text-blue-400 text-2xl"></i>
+                    ملفي الشخصي والثيمات
+                </h3>
+                <button onclick="closeModal('profile-settings-modal')" class="p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800">
+                    <i class="ph-bold ph-x text-lg"></i>
+                </button>
+            </div>
+            <form onsubmit="updateExistingUserProfile(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold mb-1 text-slate-600 dark:text-slate-400">الاسم</label>
+                    <input type="text" id="edit-user-name" required class="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-sm font-bold">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold mb-1 text-slate-600 dark:text-slate-400">النوع</label>
+                    <div class="grid grid-cols-2 gap-2.5">
+                        <label class="cursor-pointer">
+                            <input type="radio" name="edit-gender" value="male" class="peer hidden">
+                            <div class="p-2.5 rounded-xl border-2 border-slate-200 dark:border-slate-700 peer-checked:border-blue-800 peer-checked:bg-blue-50 dark:peer-checked:bg-blue-950/50 text-center font-bold text-xs">ذكر 👦</div>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="radio" name="edit-gender" value="female" class="peer hidden">
+                            <div class="p-2.5 rounded-xl border-2 border-slate-200 dark:border-slate-700 peer-checked:border-pink-600 peer-checked:bg-pink-50 dark:peer-checked:bg-pink-950/50 text-center font-bold text-xs">أنثى 👧</div>
+                        </label>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold mb-2 text-slate-600 dark:text-slate-400">لون الموقع</label>
+                    <div class="grid grid-cols-5 gap-2">
+                        <button type="button" onclick="applyColorTheme('blue', true)" data-edit-tval="blue" class="edit-theme-btn p-2 rounded-xl border-2 border-slate-200 dark:border-slate-700 flex flex-col items-center gap-1">
+                            <span class="w-6 h-6 rounded-full bg-[#1e3a8a]"></span>
+                            <span class="text-[11px] font-bold">أزرق</span>
+                        </button>
+                        <button type="button" onclick="applyColorTheme('pink', true)" data-edit-tval="pink" class="edit-theme-btn p-2 rounded-xl border-2 border-slate-200 dark:border-slate-700 flex flex-col items-center gap-1">
+                            <span class="w-6 h-6 rounded-full bg-[#db2777]"></span>
+                            <span class="text-[11px] font-bold">بينك</span>
+                        </button>
+                        <button type="button" onclick="applyColorTheme('green', true)" data-edit-tval="green" class="edit-theme-btn p-2 rounded-xl border-2 border-slate-200 dark:border-slate-700 flex flex-col items-center gap-1">
+                            <span class="w-6 h-6 rounded-full bg-[#059669]"></span>
+                            <span class="text-[11px] font-bold">أخضر</span>
+                        </button>
+                        <button type="button" onclick="applyColorTheme('red', true)" data-edit-tval="red" class="edit-theme-btn p-2 rounded-xl border-2 border-slate-200 dark:border-slate-700 flex flex-col items-center gap-1">
+                            <span class="w-6 h-6 rounded-full bg-[#dc2626]"></span>
+                            <span class="text-[11px] font-bold">أحمر</span>
+                        </button>
+                        <button type="button" onclick="applyColorTheme('purple', true)" data-edit-tval="purple" class="edit-theme-btn p-2 rounded-xl border-2 border-slate-200 dark:border-slate-700 flex flex-col items-center gap-1">
+                            <span class="w-6 h-6 rounded-full bg-[#7c3aed]"></span>
+                            <span class="text-[11px] font-bold">بنفسجي</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="pt-2 flex items-center justify-between gap-2">
+                    <button type="button" onclick="exportFullBackup()" class="px-3.5 py-2.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 text-xs font-extrabold flex items-center gap-1.5">
+                        <i class="ph-bold ph-download-simple text-base"></i>
+                        <span>تحميل ملفي الاحتياطي</span>
+                    </button>
+                    <button type="submit" class="px-5 py-2.5 rounded-xl bg-blue-900 hover:bg-blue-800 text-white text-xs font-extrabold">حفظ التعديلات</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="onboarding-modal" class="fixed inset-0 z-50 hidden"></div>
+    <div id="user-init-modal" class="fixed inset-0 z-[60] hidden"></div>
+
+    <!-- TOAST NOTIFICATION CONTAINER -->
+    <div id="toast-container" class="fixed bottom-5 left-5 right-5 sm:left-auto sm:right-6 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>
