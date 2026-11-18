@@ -1834,3 +1834,54 @@ function escapeHtml(str) {
         .replace(/"/g, '&quot;')
         .replace(/'/g, '&#039;');
 }
+
+function getAIPromptText() {
+    return `Role & Objective:
+You are an expert OCR and Educational Data Engineer. Extract all questions from the provided images/text and output a strictly valid JSON containing ONLY an array of questions under the key "questions".
+
+CRITICAL Output & Formatting Rules:
+- Output ONLY valid JSON. No conversational text before or after.
+- To handle 200+ questions without truncation, keep text concise where possible, BUT DO NOT SUMMARIZE OR TRUNCATE READING PASSAGES (القطع والنصوص القرائية). Extract reading passages completely and word-for-word.
+- Chemical Formulas & Layout Protection: To prevent RTL/LTR character mixing and scrambled numbers in chemical formulas (e.g., H2SO4, Fe2O3) or math, wrap English words, numbers, and formulas inside explicit HTML tags with direction, like <span dir="ltr">H2SO4</span> or use LaTeX ($...$).
+- Quranic Text: Preserve Uthmanic/Hafs diacritics (تشكيل) and text standards accurately.
+- Tables & HTML: If a table exists, put its HTML code (<table>...</table>) inside "question_html". Otherwise, leave "question_html" as an empty string "".
+
+Required JSON Schema:
+{
+  "questions": [
+    {
+      "number": "1",
+      "type": "mcq",
+      "question_text": "نص السؤال أو القطعة كاملة هنا. استخدم <span dir=\\\"ltr\\\">...</span> للصيغ الكيميائية.",
+      "question_html": "",
+      "options": {
+        "أ": "نص الاختيار الأول",
+        "ب": "نص الاختيار الثاني",
+        "ج": "نص الاختيار الثالث",
+        "د": "نص الاختيار الرابع"
+      },
+      "correct_answer": "أ",
+      "explanation": "شرح الإجابة باختصار"
+    },
+    {
+      "number": "2",
+      "type": "essay",
+      "question_text": "نص السؤال المقالي...",
+      "question_html": "",
+      "options": {},
+      "correct_answer": "",
+      "model_answer": "الإجابة النموذجية للسؤال المقالي",
+      "explanation": "شرح أو ملاحظات"
+    }
+  ]
+}`;
+}
+
+function copyAIPrompt() {
+    const text = getAIPromptText();
+    navigator.clipboard.writeText(text).then(() => {
+        showToast('تم نسخ البرومت المحدث (بدون معلومات مكررة)! ابعته لـ Gemini.', 'success');
+    }).catch(() => {
+        showToast('فشل النسخ، حاول مرة أخرى.', 'error');
+    });
+}
